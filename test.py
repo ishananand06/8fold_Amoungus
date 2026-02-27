@@ -154,6 +154,27 @@ class TestGameEngine(unittest.TestCase):
         self.assertEqual(result["cause"], "timeout")
         self.assertEqual(result["final_round"], 10)
 
+
+
+class TestAgents(unittest.TestCase):
+    def test_parse_llm_json(self):
+        from agents import parse_llm_json
+        self.assertEqual(parse_llm_json('{"action": "move"}'), {"action": "move"})
+        self.assertEqual(parse_llm_json('`json\n{"action": "kill"}\n`'), {"action": "kill"})
+        self.assertEqual(parse_llm_json('Here is my move: {"action": "wait"}'), {"action": "wait"})
+
+    def test_full_game_with_bots(self):
+        from engine import GameEngine
+        from agents import RuleBasedBot, RandomBot
+        
+        agents = {}
+        for i in range(3): agents[f"p{i}"] = RuleBasedBot()
+        for i in range(3, 7): agents[f"p{i}"] = RandomBot()
+            
+        # We run it with small limit to ensure it ends quickly if not won
+        engine = GameEngine(GameConfig(max_total_rounds=10), agents)
+        result = engine.run()
+        self.assertIn(result["winner"], ["crewmates", "impostors"])
+
 if __name__ == '__main__':
     unittest.main()
-
