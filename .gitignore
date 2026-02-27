@@ -1,7 +1,24 @@
-__pycache__/
-*.json
-game_logs/
-match_history/
-*.pyc
+# Environment variables
+.env
 .env*
-!template_agent.py
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
