@@ -14,7 +14,7 @@ This project uses `uv` for lightning-fast dependency management and reproducible
 curl -LsSf [https://astral.sh/uv/install.sh](https://astral.sh/uv/install.sh) | sh
 
 # Clone and sync the environment
-git clone [https://github.com/goelanmol124/EightFold_Amongus](https://github.com/goelanmol124/EightFold_Amongus)
+git clone [https://github.com/ishananand06/8fold_Amoungus.git](https://github.com/ishananand06/8fold_Amoungus.git)
 cd EightFold_Amongus
 uv sync
 ```
