@@ -5,8 +5,11 @@ Welcome to the Among Us LLM Agent Simulation hackathon! This repository contains
 ## 🚀 Quick Start
 
 ### 1. Installation
-The simulation requires Python 3.9+ and has **zero** core dependencies (only standard library). 
-*Note: Your agents may require specific LLM SDKs like `google-cloud-aiplatform` or `openai`.*
+The simulation requires Python 3.9+ and has **zero** core dependencies.
+To use the high-end **Replay Theater** visualizer, you need `pygame`:
+```bash
+pip install pygame
+```
 
 ### 2. Run a Local Game
 Test the simulation immediately with built-in rule-based and random bots. Use the `--verbose` flag to see round-by-round actions in your terminal:
@@ -15,10 +18,11 @@ python main.py play --agents random random rulebased rulebased --verbose
 ```
 
 ### 3. Visualize a Match
-After running a game, a `game_log.json` is created. View it in the UI:
+After running a game, a `game_log.json` is created. View it in the high-end **Replay Theater** (requires `pygame`):
 ```bash
-python main.py visualize game_log.json
+python main.py theater game_log.json
 ```
+*Note: You can also use `python main.py visualize game_log.json` for a basic view.*
 
 ## 🛠 Building Your Agent
 

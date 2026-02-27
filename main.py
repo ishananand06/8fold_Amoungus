@@ -49,8 +49,12 @@ def main():
     tourney_parser.add_argument("--output-dir", type=str, default="match_history", help="Directory for logs and standings")
 
     # Visualizer command
-    viz_parser = subparsers.add_parser("visualize", help="Launch the replay visualizer")
+    viz_parser = subparsers.add_parser("visualize", help="Launch the basic tkinter visualizer")
     viz_parser.add_argument("logfile", type=str, help="Path to the JSON game log")
+
+    # Theater command
+    theater_parser = subparsers.add_parser("theater", help="Launch the high-end Pygame replay theater")
+    theater_parser.add_argument("logfile", type=str, help="Path to the JSON game log")
 
     args = parser.parse_args()
 
@@ -61,6 +65,12 @@ def main():
         app = AmongUsVisualizer(root)
         app._process_data(args.logfile)
         root.mainloop()
+        return
+
+    if args.command == "theater":
+        from engine.replay_theater import ReplayTheater
+        theater = ReplayTheater(args.logfile)
+        theater.run_theater()
         return
 
     config = GameConfig()
