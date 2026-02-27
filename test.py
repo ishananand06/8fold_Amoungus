@@ -1,4 +1,4 @@
-import unittest
+﻿import unittest
 from config import GameConfig, MAP_ADJACENCY, ALL_ROOMS, TASK_POOL
 from engine import Role, Phase, SabotageType, Player, Task, ActiveSabotage, ActionResult, GameState
 
@@ -38,8 +38,6 @@ class TestEngineModels(unittest.TestCase):
         self.assertEqual(len(state.players), 0)
         self.assertEqual(len(state.tasks), 0)
 
-if __name__ == '__main__':
-    unittest.main()
 
 class TestObservationGenerator(unittest.TestCase):
     def setUp(self):
@@ -84,4 +82,46 @@ class TestObservationGenerator(unittest.TestCase):
         self.state.tasks["p1"][0].progress = 1
         # p2 is impostor so their task shouldn't count towards total required
         self.assertEqual(self.obs_gen._global_task_progress(), 0.5)
+
+
+class TestActionResolver(unittest.TestCase):
+    def setUp(self):
+        from engine import ActionResolver
+        self.config = GameConfig()
+        self.state = GameState(config=self.config)
+        self.resolver = ActionResolver(self.state)
+
+        self.state.players["p1"] = Player(id="p1", role=Role.CREWMATE, location="Cafeteria")
+        self.state.players["p2"] = Player(id="p2", role=Role.IMPOSTOR, location="Cafeteria", kill_cooldown=0)
+        self.state.players["p3"] = Player(id="p3", role=Role.CREWMATE, location="Admin")
+
+    def test_movement_resolution(self):
+        actions = {"p1": {"action": "move", "target": "Admin"}}
+        self.resolver.resolve_round(actions)
+        
+        self.assertEqual(self.state.players["p1"].location, "Admin")
+        self.assertEqual(self.state.players["p1"].last_action, "moving")
+        # Check arrival event
+        self.assertIn("p1 arrived from Cafeteria", self.state.events["p3"])
+
+    def test_kill_resolution(self):
+        actions = {"p2": {"action": "kill", "target": "p1"}}
+        self.resolver.resolve_round(actions)
+        
+        self.assertFalse(self.state.players["p1"].alive)
+        self.assertEqual(len(self.state.bodies), 1)
+        self.assertEqual(self.state.players["p2"].kill_cooldown, self.config.kill_cooldown)
+
+    def test_report_triggers_meeting(self):
+        self.state.bodies.append({"player_id": "p99", "location": "Cafeteria"})
+        actions = {"p1": {"action": "report"}}
+        self.resolver.resolve_round(actions)
+        
+        self.assertEqual(self.state.phase, Phase.DISCUSSION)
+        self.assertIsNotNone(self.state.meeting_context)
+        self.assertEqual(self.state.meeting_context["trigger"], "body_report")
+
+
+if __name__ == '__main__':
+    unittest.main()
 
