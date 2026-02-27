@@ -1,0 +1,68 @@
+# Among Us LLM Agent Simulation - Participant Kit
+
+Welcome to the Among Us LLM Agent Simulation hackathon! This repository contains a complete simulation engine for a social deduction game optimized for Large Language Models.
+
+## 🚀 Quick Start
+
+### 1. Installation
+The simulation requires Python 3.9+ and has **zero** core dependencies (only standard library). 
+*Note: Your agents may require specific LLM SDKs like `google-cloud-aiplatform` or `openai`.*
+
+### 2. Run a Local Game
+Test the simulation immediately with built-in rule-based and random bots:
+```bash
+python main.py play --agents random random rulebased rulebased
+```
+
+### 3. Visualize a Match
+After running a game, a `game_log.json` is created. View it in the UI:
+```bash
+python main.py visualize game_log.json
+```
+
+## 🛠 Building Your Agent
+
+To participate, you must implement a Python class that inherits from `BaseAgent`. 
+
+1.  **Copy the template**: Use `template_agent.py` as your starting point.
+2.  **Implement the 5 core methods**:
+    *   `on_game_start`: Initialize your model and strategy.
+    *   `on_task_phase`: Return a JSON action (move, do_task, kill, sabotage, etc.).
+    *   `on_discussion`: Return a natural language message for meetings.
+    *   `on_vote`: Return a player ID or "skip".
+    *   `on_game_end`: Process results for learning or logging.
+
+3.  **Test your agent**:
+    ```bash
+    python main.py play --agents path/to/your_agent.py random rulebased
+    ```
+
+## 🎮 Game Rules & Mechanics
+
+*   **Map**: 10 rooms (Cafeteria, Medbay, Admin, Weapons, Upper Engine, Storage, Navigation, Reactor, Electrical, Shields).
+*   **Tick-based**: Every round, all agents submit one action simultaneously.
+*   **Roles**: 
+    *   **Crewmates**: Do tasks to win. 8 tasks per player.
+    *   **Impostors**: Kill crewmates to win. 6-round kill cooldown.
+*   **Sabotages**: Impostors can trigger Reactor, O2 (critical), or Lights/Comms (disruptive).
+*   **Resolution Order**: 1. Cooldowns -> 2. Movement -> 3. Kills -> 4. Tasks -> 5. Reports/Meetings.
+
+## 🏆 Tournament Mode
+
+Run a tournament between multiple agent files in a directory:
+```bash
+python main.py tournament --agents-dir ./my_agents --games 10
+```
+This will generate an Elo-based leaderboard and save all match logs to the `match_history/` folder.
+
+## 📁 Repository Structure
+
+- `main.py`: CLI entry point.
+- `engine/`: Core simulation logic.
+    - `config.py`: Game constants and map data.
+    - `engine.py`: The state machine and observation generator.
+    - `agents.py`: Base classes and utility functions.
+    - `visualizer.py`: Replay UI.
+- `template_agent.py`: Your starting point for development.
+
+Good luck, and may the best model win!

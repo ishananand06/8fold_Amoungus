@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 from typing import Any
 
-from config import GameConfig
+from .config import GameConfig
 
 class Role(Enum):
     CREWMATE = "crewmate"
@@ -135,7 +135,7 @@ class ObservationGenerator:
             ]
             bodies_present = [b["player_id"] for b in self.state.bodies if b["location"] == player.location]
         
-        from config import MAP_ADJACENCY
+        from .config import MAP_ADJACENCY
         adjacent_rooms = MAP_ADJACENCY.get(player.location, [])
 
         events_last_round = self.state.events.get(player_id, [])
@@ -152,7 +152,8 @@ class ObservationGenerator:
                     "location": t.location,
                     "progress": t.progress,
                     "required": t.required,
-                    "visual": t.visual
+                    "visual": t.visual,
+                    "id_to_use": t.task_id # Explicit field for the agent
                 }
                 if player.role == Role.IMPOSTOR:
                     t_dict["note"] = "FAKE - use for alibi"
@@ -253,7 +254,8 @@ class ObservationGenerator:
                 "location": t.location,
                 "progress": t.progress,
                 "required": t.required,
-                "visual": t.visual
+                "visual": t.visual,
+                "id_to_use": t.task_id
             })
 
         return {
@@ -309,7 +311,7 @@ class ObservationGenerator:
         if player.role == Role.IMPOSTOR:
             impostor_teammates = [p.id for p in self.state.players.values() if p.role == Role.IMPOSTOR and p.id != player_id]
         
-        from config import MAP_ADJACENCY, ALL_ROOMS
+        from .config import MAP_ADJACENCY, ALL_ROOMS
         return {
             "game_id": "game",
             "your_id": player_id,
@@ -515,7 +517,7 @@ class ActionResolver:
         if sabotages and self.state.sabotage is None:
             pid = sabotages[0]
             sab_name = validated_actions[pid].get("target")
-            from config import SABOTAGE_DEFINITIONS
+            from .config import SABOTAGE_DEFINITIONS
             if sab_name in SABOTAGE_DEFINITIONS:
                 sdef = SABOTAGE_DEFINITIONS[sab_name]
                 sab_type = SabotageType(sab_name)
@@ -549,7 +551,7 @@ class ActionResolver:
         # Step 10: RESOLVE ADMIN TABLE
         admin_users = [pid for pid, act in validated_actions.items() if act.get("action") == "use_admin"]
         if admin_users:
-            from config import MAP_ADJACENCY
+            from .config import MAP_ADJACENCY
             counts = {r: 0 for r in MAP_ADJACENCY.keys()}
             for p in self.state.players.values():
                 if p.alive:
@@ -583,11 +585,21 @@ class ActionResolver:
                     if len(hist) > self.state.config.memory_sighting_cap:
                         self.state.sighting_history[p.id] = hist[-self.state.config.memory_sighting_cap:]
 
-        # Step 13: LOG ROUND (minimalist placeholder)
+        # Step 13: LOG ROUND
         self.state.game_log.append({
             "round": self.state.round_number,
-            "actions": validated_actions,
-            "results": {pid: {"success": r.success, "reason": r.reason} for pid, r in self.state.action_results.items()}
+            "actions": actions, # Log original submitted actions
+            "results": {pid: {"success": r.success, "reason": r.reason} for pid, r in self.state.action_results.items()},
+            "state": {
+                "player_locations": {pid: p.location for pid, p in self.state.players.items()},
+                "alive_players": [pid for pid, p in self.state.players.items() if p.alive],
+                "bodies": copy.deepcopy(self.state.bodies),
+                "sabotage": {
+                    "type": self.state.sabotage.type.value,
+                    "countdown": self.state.sabotage.countdown,
+                    "fix_progress": self.state.sabotage.fix_progress
+                } if self.state.sabotage else None
+            }
         })
 
         self._check_win_condition()
@@ -605,7 +617,7 @@ class ActionResolver:
             
         if not p.alive:
             if act == "move":
-                from config import MAP_ADJACENCY
+                from .config import MAP_ADJACENCY
                 if action.get("target") in MAP_ADJACENCY.get(p.location, []):
                     return ActionResult(act, True)
                 return ActionResult(act, False, "Invalid move target")
@@ -617,7 +629,7 @@ class ActionResolver:
                 return ActionResult(act, False, "Invalid task or location")
             return ActionResult(act, False, "Ghosts can only move or do tasks")
 
-        from config import MAP_ADJACENCY, SABOTAGE_DEFINITIONS
+        from .config import MAP_ADJACENCY, SABOTAGE_DEFINITIONS
         if act == "move":
             if action.get("target") in MAP_ADJACENCY.get(p.location, []):
                 return ActionResult(act, True)
@@ -734,17 +746,22 @@ class GameEngine:
         self.obs = None
         self.resolver = None
 
-    def setup_game(self) -> None:
+    def setup_game(self, forced_roles: dict[str, Role] | None = None) -> None:
         self.config.validate()
         
         # Assign Roles
         player_ids = list(self.agents.keys())
-        random.shuffle(player_ids)
+        if not forced_roles:
+            random.shuffle(player_ids)
         
         self.state = GameState(config=self.config)
         
         for i, pid in enumerate(player_ids):
-            role = Role.IMPOSTOR if i < self.config.num_impostors else Role.CREWMATE
+            if forced_roles and pid in forced_roles:
+                role = forced_roles[pid]
+            else:
+                role = Role.IMPOSTOR if i < self.config.num_impostors else Role.CREWMATE
+            
             p = Player(
                 id=pid,
                 role=role,
@@ -755,7 +772,7 @@ class GameEngine:
             self.state.players[pid] = p
 
         # Assign Tasks
-        from config import TASK_POOL
+        from .config import TASK_POOL
         for pid, p in self.state.players.items():
             if p.role == Role.CREWMATE:
                 visual_pool = [t for t in TASK_POOL if t["visual"]]
@@ -781,7 +798,7 @@ class GameEngine:
                 assigned = []
                 for i, t in enumerate(tasks):
                     task_obj = Task(
-                        task_id=f"{t['name'].replace(' ', '_').lower()}_{t['location'].lower()}_{pid}_{i}",
+                        task_id=f"{t['name']} in {t['location']}",
                         name=t["name"],
                         location=t["location"],
                         required=t["required"],
@@ -795,7 +812,7 @@ class GameEngine:
                 for i in range(self.config.tasks_per_crewmate):
                     t = random.choice(TASK_POOL)
                     task_obj = Task(
-                        task_id=f"fake_{t['name'].replace(' ', '_').lower()}_{t['location'].lower()}_{pid}_{i}",
+                        task_id=f"{t['name']} in {t['location']}",
                         name=t["name"],
                         location=t["location"],
                         required=t["required"],
@@ -810,8 +827,8 @@ class GameEngine:
         for pid, agent in self.agents.items():
             self._call_agent(pid, "on_game_start", self.obs.generate_game_start_info(pid))
 
-    def run(self) -> dict:
-        self.setup_game()
+    def run(self, forced_roles: dict[str, Role] | None = None) -> dict:
+        self.setup_game(forced_roles)
         
         while self.state.phase != Phase.GAME_OVER:
             if self.state.phase == Phase.TASK:
@@ -855,6 +872,7 @@ class GameEngine:
                 raw = f.result()
                 actions[pid] = self._sanitize_action(raw)
 
+        print(f"  Round {self.state.round_number}: resolving actions...", end="\r")
         self.resolver.resolve_round(actions)
 
     def _run_discussion_phase(self) -> None:
@@ -917,7 +935,8 @@ class GameEngine:
             "voted_out": elected,
             "vote_tally": dict(tally),
             "votes": votes,
-            "role_revealed": role_revealed
+            "role_revealed": role_revealed,
+            "transcript": copy.deepcopy(self.state.chat_history)
         })
 
         if self.resolver._check_win_condition():
@@ -954,7 +973,7 @@ class GameEngine:
             return None
 
     def _sanitize_action(self, raw: Any) -> dict:
-        from config import VALID_ACTIONS
+        from .config import VALID_ACTIONS
         if not isinstance(raw, dict) or "action" not in raw:
             return {"action": "wait"}
         if raw["action"] not in VALID_ACTIONS:
@@ -974,6 +993,14 @@ class GameEngine:
             "cause": self.state.win_cause,
             "final_round": self.state.round_number,
             "all_roles": {p.id: p.role.value for p in self.state.players.values()},
-            "player_stats": {},
+            "player_stats": {
+                pid: {
+                    "alive": p.alive,
+                    "ejected": p.ejected,
+                    "location": p.location,
+                    "meetings_called": self.config.emergency_meetings_per_player - p.emergency_meetings_remaining
+                } for pid, p in self.state.players.items()
+            },
+            "meeting_history": self.state.meeting_history,
             "game_log": self.state.game_log
         }

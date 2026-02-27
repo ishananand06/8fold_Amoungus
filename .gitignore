@@ -1,0 +1,7 @@
+__pycache__/
+*.json
+game_logs/
+match_history/
+*.pyc
+.env*
+!template_agent.py

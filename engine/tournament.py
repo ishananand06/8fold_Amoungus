@@ -1,10 +1,11 @@
 import json
+import random
 from pathlib import Path
 from math import ceil
 
-from config import GameConfig
-from engine import GameEngine
-from agents import RuleBasedBot
+from .config import GameConfig
+from .engine import GameEngine, Role
+from .agents import RuleBasedBot
 
 def compute_elo_delta(own_rating: float, opp_avg_rating: float, won: bool, k: int = 16) -> float:
     expected = 1.0 / (1.0 + 10 ** ((opp_avg_rating - own_rating) / 400.0))
@@ -29,36 +30,72 @@ class TournamentRunner:
         self.stats = {team: _empty_stats() for team in agent_classes}
         self.game_results = []
 
-    def generate_matchups(self) -> list[list[str]]:
+    def generate_balanced_matchups(self) -> list[dict]:
+        """
+        Generates a tournament schedule where every team plays exactly the same
+        number of games as Impostor and Crewmate.
+        """
         teams = list(self.agent_classes.keys())
         if not teams: return []
-        num_games = max(self.games_per_team, ceil(self.games_per_team * len(teams) / self.config.num_players))
-        lobbies = []
-        for i in range(num_games):
-            lobby = []
-            for j in range(self.config.num_players):
-                idx = (i * self.config.num_players + j) % len(teams)
-                lobby.append(teams[idx])
-            lobbies.append(lobby)
-        return lobbies
+        num_teams = len(teams)
+        
+        # Calculate expected roles ratio
+        # Default: 2 impostors / 7 players = 28.5%
+        imp_per_team = ceil(self.games_per_team * (self.config.num_impostors / self.config.num_players))
+        crew_per_team = self.games_per_team - imp_per_team
+        
+        role_queues = {
+            Role.IMPOSTOR: teams * imp_per_team,
+            Role.CREWMATE: teams * crew_per_team
+        }
+        random.shuffle(role_queues[Role.IMPOSTOR])
+        random.shuffle(role_queues[Role.CREWMATE])
+        
+        matchups = []
+        # Continue until all role queues are empty
+        while role_queues[Role.IMPOSTOR] or role_queues[Role.CREWMATE]:
+            lobby_setup = {} # pid -> (team, role)
+            
+            # 1. Fill Impostors
+            for j in range(self.config.num_impostors):
+                if role_queues[Role.IMPOSTOR]:
+                    team = role_queues[Role.IMPOSTOR].pop()
+                    lobby_setup[f"player_{j}"] = (team, Role.IMPOSTOR)
+                else:
+                    lobby_setup[f"player_{j}"] = ("__RuleBasedBot__", Role.IMPOSTOR)
+            
+            # 2. Fill Crewmates
+            for j in range(self.config.num_impostors, self.config.num_players):
+                if role_queues[Role.CREWMATE]:
+                    team = role_queues[Role.CREWMATE].pop()
+                    lobby_setup[f"player_{j}"] = (team, Role.CREWMATE)
+                else:
+                    lobby_setup[f"player_{j}"] = ("__RuleBasedBot__", Role.CREWMATE)
+            
+            matchups.append(lobby_setup)
+            
+        return matchups
 
     def run_tournament(self) -> list[dict]:
         self.log_dir.mkdir(parents=True, exist_ok=True)
-        matchups = self.generate_matchups()
+        # Use balanced matchups by default for fairness
+        matchups = self.generate_balanced_matchups()
         
-        for game_idx, lobby in enumerate(matchups):
+        for game_idx, lobby_setup in enumerate(matchups):
             agents = {}
             team_mapping = {}
-            for i, team_name in enumerate(lobby):
-                pid = f"player_{i}"
+            forced_roles = {}
+            
+            for pid, (team_name, role) in lobby_setup.items():
                 if team_name == "__RuleBasedBot__":
                     agents[pid] = RuleBasedBot()
                 else:
                     agents[pid] = self.agent_classes[team_name]()
                 team_mapping[pid] = team_name
+                forced_roles[pid] = role
                 
             engine = GameEngine(self.config, agents)
-            result = engine.run()
+            result = engine.run(forced_roles=forced_roles)
             result["team_mapping"] = team_mapping
             
             self._update_elo(result, team_mapping)
