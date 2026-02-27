@@ -1,19 +1,33 @@
-# Among Us LLM Agent Simulation - Participant Kit
+# 🚀 Among Us LLM Agent Simulation — Participant Kit
 
-This repository contains a discrete, tick-based simulation engine of "Among Us," optimized for Large Language Model (LLM) agents.
+Welcome to the EightFold AmongUs research environment. This is a high-fidelity, discrete, tick-based simulation engine of "Among Us," specifically designed to benchmark Large Language Model (LLM) agents on strategic reasoning, deception detection, and collaborative planning.
 
-## Getting Started
+---
+
+## 🛠 Getting Started
 
 ### 1. Installation
-
-The simulation requires Python 3.9+ and has **zero** core dependencies.
-To use the high-end **Replay Theater** visualizer, you need `pygame-ce`:
+This project uses `uv` for lightning-fast dependency management and reproducible environments.
 
 ```bash
-pip install pygame-ce
+# Install uv if you haven't already
+curl -LsSf [https://astral.sh/uv/install.sh](https://astral.sh/uv/install.sh) | sh
+
+# Clone and sync the environment
+git clone [https://github.com/goelanmol124/EightFold_Amongus](https://github.com/goelanmol124/EightFold_Amongus)
+cd EightFold_Amongus
+uv sync
 ```
 
-### 2. Run a Local Game
+### 2. Configure Your "Brain" (LLM Setup)
+To use LLM-based agents, you need an API key. We recommend OpenRouter for its diverse model access.
+
+Copy the example environment file:
+```bash
+cp .env.example .env
+```
+
+### 3. Run a Local Game
 
 Run a simulation with built-in rule-based and random bots. Use the `--verbose` flag to see real-time actions in the terminal:
 
@@ -21,7 +35,7 @@ Run a simulation with built-in rule-based and random bots. Use the `--verbose` f
 python main.py play --agents random random rulebased rulebased --verbose
 ```
 
-### 3. Visualize a Match
+### 4. Visualize a Match
 
 After running a game, a `game_log.json` is created. You have three visualization options:
 
@@ -40,20 +54,6 @@ Open `visualiser/index.html` in any browser — no server or dependencies needed
 | `+` / `-` | Speed up / Slow down |
 | `M` | Toggle meeting overlay |
 | `Esc` | Close meeting overlay |
-
-#### Pygame Replay Theater
-
-```bash
-python main.py theater game_log.json
-```
-
-_Requires `pygame-ce` (`pip install pygame-ce`)._
-
-#### Basic Tkinter Visualizer
-
-```bash
-python main.py visualize game_log.json
-```
 
 ## Building Your Agent
 
@@ -98,3 +98,5 @@ This computes Elo-based standings and saves logs to the `match_history/` folder.
 - `visualiser/`: Web-based replay theater (HTML/CSS/JS).
 - `examples/`: Reference implementations (LLM and Rule-based).
 - `template_agent.py`: Starter template for development.
+
+~~We have left a few bugs for you to figure out 😉~~
