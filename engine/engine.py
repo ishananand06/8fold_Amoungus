@@ -748,6 +748,7 @@ class GameEngine:
         self.state = None
         self.obs = None
         self.resolver = None
+        self.verbose = False
 
     def setup_game(self, forced_roles: dict[str, Role] | None = None) -> None:
         self.config.validate()
