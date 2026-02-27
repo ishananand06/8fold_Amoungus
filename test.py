@@ -122,6 +122,38 @@ class TestActionResolver(unittest.TestCase):
         self.assertEqual(self.state.meeting_context["trigger"], "body_report")
 
 
+from engine import BaseAgent
+
+class MockAgent(BaseAgent):
+    def __init__(self): pass
+    def on_game_start(self, config): pass
+    def on_task_phase(self, obs): return {"action": "wait"}
+    def on_discussion(self, obs): return "hello"
+    def on_vote(self, obs): return "skip"
+    def on_game_end(self, result): pass
+
+class TestGameEngine(unittest.TestCase):
+    def test_engine_initialization(self):
+        from engine import GameEngine
+        agents = {f"p{i}": MockAgent() for i in range(7)}
+        engine = GameEngine(GameConfig(), agents)
+        engine.setup_game()
+        
+        self.assertEqual(len(engine.state.players), 7)
+        impostors = [p for p in engine.state.players.values() if p.role == Role.IMPOSTOR]
+        crewmates = [p for p in engine.state.players.values() if p.role == Role.CREWMATE]
+        self.assertEqual(len(impostors), engine.config.num_impostors)
+        self.assertEqual(len(crewmates), engine.config.num_players - engine.config.num_impostors)
+        
+    def test_engine_run(self):
+        from engine import GameEngine
+        agents = {f"p{i}": MockAgent() for i in range(7)}
+        engine = GameEngine(GameConfig(max_total_rounds=10), agents)
+        result = engine.run()
+        self.assertEqual(result["winner"], "crewmates")
+        self.assertEqual(result["cause"], "timeout")
+        self.assertEqual(result["final_round"], 10)
+
 if __name__ == '__main__':
     unittest.main()
 

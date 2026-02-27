@@ -720,3 +720,260 @@ class ActionResolver:
             return True
             
         return False
+
+import random
+from collections import Counter
+from concurrent.futures import ThreadPoolExecutor, TimeoutError
+import logging
+
+class GameEngine:
+    def __init__(self, config: GameConfig, agents: dict[str, BaseAgent]):
+        self.config = config
+        self.agents = agents
+        self.state = None
+        self.obs = None
+        self.resolver = None
+
+    def setup_game(self) -> None:
+        self.config.validate()
+        
+        # Assign Roles
+        player_ids = list(self.agents.keys())
+        random.shuffle(player_ids)
+        
+        self.state = GameState(config=self.config)
+        
+        for i, pid in enumerate(player_ids):
+            role = Role.IMPOSTOR if i < self.config.num_impostors else Role.CREWMATE
+            p = Player(
+                id=pid,
+                role=role,
+                location="Cafeteria",
+                kill_cooldown=self.config.kill_cooldown if role == Role.IMPOSTOR else 0,
+                emergency_meetings_remaining=self.config.emergency_meetings_per_player
+            )
+            self.state.players[pid] = p
+
+        # Assign Tasks
+        from config import TASK_POOL
+        for pid, p in self.state.players.items():
+            if p.role == Role.CREWMATE:
+                visual_pool = [t for t in TASK_POOL if t["visual"]]
+                normal_pool = [t for t in TASK_POOL if not t["visual"]]
+                
+                tasks = []
+                # Pick visual
+                for _ in range(self.config.visual_tasks_per_crewmate):
+                    if visual_pool:
+                        t = random.choice(visual_pool)
+                        tasks.append(t)
+                        visual_pool.remove(t)
+                
+                # Pick normal
+                needed = self.config.tasks_per_crewmate - self.config.visual_tasks_per_crewmate
+                for _ in range(needed):
+                    if normal_pool:
+                        t = random.choice(normal_pool)
+                        tasks.append(t)
+                        normal_pool.remove(t)
+                
+                # Assign to state
+                assigned = []
+                for i, t in enumerate(tasks):
+                    task_obj = Task(
+                        task_id=f"{t['name'].replace(' ', '_').lower()}_{t['location'].lower()}_{pid}_{i}",
+                        name=t["name"],
+                        location=t["location"],
+                        required=t["required"],
+                        visual=t["visual"]
+                    )
+                    assigned.append(task_obj)
+                self.state.tasks[pid] = assigned
+            else:
+                # Assign fake tasks for impostors
+                assigned = []
+                for i in range(self.config.tasks_per_crewmate):
+                    t = random.choice(TASK_POOL)
+                    task_obj = Task(
+                        task_id=f"fake_{t['name'].replace(' ', '_').lower()}_{t['location'].lower()}_{pid}_{i}",
+                        name=t["name"],
+                        location=t["location"],
+                        required=t["required"],
+                        visual=t["visual"]
+                    )
+                    assigned.append(task_obj)
+                self.state.tasks[pid] = assigned
+
+        self.obs = ObservationGenerator(self.state)
+        self.resolver = ActionResolver(self.state)
+
+        for pid, agent in self.agents.items():
+            self._call_agent(pid, "on_game_start", self.obs.generate_game_start_info(pid))
+
+    def run(self) -> dict:
+        self.setup_game()
+        
+        while self.state.phase != Phase.GAME_OVER:
+            if self.state.phase == Phase.TASK:
+                self._run_task_round()
+            elif self.state.phase == Phase.DISCUSSION:
+                self._run_discussion_phase()
+            elif self.state.phase == Phase.VOTING:
+                self._run_voting_phase()
+                
+        result = self._build_game_result()
+        for pid, agent in self.agents.items():
+            self._call_agent(pid, "on_game_end", self.obs.generate_game_end_info(pid))
+        return result
+
+    def _run_task_round(self) -> None:
+        if self.state.round_number >= self.config.max_total_rounds:
+            self.state.winner = "crewmates"
+            self.state.win_cause = "timeout"
+            self.state.phase = Phase.GAME_OVER
+            return
+
+        acting_players = []
+        for p in self.state.players.values():
+            if p.alive and not p.ejected:
+                acting_players.append(p.id)
+            elif not p.alive and p.role == Role.CREWMATE and self.config.ghost_tasks_enabled:
+                acting_players.append(p.id)
+
+        observations = {}
+        for pid in acting_players:
+            p = self.state.players[pid]
+            if p.alive:
+                observations[pid] = copy.deepcopy(self.obs.generate_task_observation(pid))
+            else:
+                observations[pid] = copy.deepcopy(self.obs.generate_ghost_observation(pid))
+
+        actions = {}
+        with ThreadPoolExecutor(max_workers=max(1, len(acting_players))) as pool:
+            futures = {pid: pool.submit(self._call_agent, pid, "on_task_phase", observations[pid]) for pid in acting_players}
+            for pid, f in futures.items():
+                raw = f.result()
+                actions[pid] = self._sanitize_action(raw)
+
+        self.resolver.resolve_round(actions)
+
+    def _run_discussion_phase(self) -> None:
+        living_ids = [p.id for p in self.state.players.values() if p.alive]
+        random.shuffle(living_ids)
+        self.state.discussion_speaker_order = living_ids
+        self.state.chat_history = []
+
+        for rotation in range(self.config.discussion_rotations):
+            for speaker_id in self.state.discussion_speaker_order:
+                speaker_obs = copy.deepcopy(self.obs.generate_discussion_observation(speaker_id))
+                message = self._call_agent(speaker_id, "on_discussion", speaker_obs)
+                if message is None: message = ""
+                message = str(message)[:self.config.message_char_limit]
+                self.state.chat_history.append({
+                    "speaker": speaker_id,
+                    "rotation": rotation + 1,
+                    "message": message
+                })
+                
+        self.state.phase = Phase.VOTING
+
+    def _run_voting_phase(self) -> None:
+        living_players = [p for p in self.state.players.values() if p.alive]
+        observations = {p.id: copy.deepcopy(self.obs.generate_voting_observation(p.id)) for p in living_players}
+        
+        votes = {}
+        with ThreadPoolExecutor(max_workers=max(1, len(living_players))) as pool:
+            futures = {pid: pool.submit(self._call_agent, pid, "on_vote", observations[pid]) for pid in observations.keys()}
+            for pid, f in futures.items():
+                raw_vote = f.result()
+                votes[pid] = self._sanitize_vote(raw_vote, living_players)
+
+        tally = Counter(votes.values())
+        elected = None
+        if tally:
+            top_two = tally.most_common(2)
+            if len(top_two) == 1:
+                elected = top_two[0][0]
+            elif top_two[0][1] > top_two[1][1]:
+                elected = top_two[0][0]
+                
+        if elected == "skip":
+            elected = None
+            
+        role_revealed = None
+        if elected and elected in self.state.players:
+            p = self.state.players[elected]
+            p.alive = False
+            p.ejected = True
+            if self.config.confirm_ejects:
+                role_revealed = p.role.value
+                
+        self.state.meeting_history.append({
+            "round_called": self.state.round_number,
+            "called_by": self.state.meeting_context["called_by"],
+            "trigger": self.state.meeting_context["trigger"],
+            "body_found": self.state.meeting_context.get("body_found"),
+            "body_location": self.state.meeting_context.get("body_location"),
+            "voted_out": elected,
+            "vote_tally": dict(tally),
+            "votes": votes,
+            "role_revealed": role_revealed
+        })
+
+        if self.resolver._check_win_condition():
+            return
+
+        for p in self.state.players.values():
+            if p.alive:
+                p.location = "Cafeteria"
+                if p.role == Role.IMPOSTOR:
+                    p.kill_cooldown = self.config.kill_cooldown
+        
+        self.state.sabotage_cooldown = self.config.sabotage_cooldown
+        self.state.bodies.clear()
+        self.state.meeting_context = None
+        self.state.chat_history = []
+        self.state.events = {pid: [] for pid in self.state.players.keys()}
+        self.state.admin_table_snapshot = None
+        self.state.admin_table_user = None
+        self.state.phase = Phase.TASK
+
+    def _call_agent(self, player_id: str, method: str, *args) -> Any:
+        agent = self.agents[player_id]
+        func = getattr(agent, method)
+        try:
+            with ThreadPoolExecutor(max_workers=1) as executor:
+                future = executor.submit(func, *args)
+                result = future.result(timeout=self.config.agent_timeout_seconds)
+            return result
+        except TimeoutError:
+            logging.warning(f"{player_id} timed out on {method}")
+            return None
+        except Exception as e:
+            logging.warning(f"{player_id} raised {e} on {method}")
+            return None
+
+    def _sanitize_action(self, raw: Any) -> dict:
+        from config import VALID_ACTIONS
+        if not isinstance(raw, dict) or "action" not in raw:
+            return {"action": "wait"}
+        if raw["action"] not in VALID_ACTIONS:
+            return {"action": "wait"}
+        return {"action": raw["action"], "target": raw.get("target")}
+
+    def _sanitize_vote(self, raw: Any, living_players: list[Player]) -> str:
+        if raw is None: return "skip"
+        raw = str(raw).strip()
+        valid_targets = [p.id for p in living_players] + ["skip"]
+        if raw not in valid_targets: return "skip"
+        return raw
+
+    def _build_game_result(self) -> dict:
+        return {
+            "winner": self.state.winner,
+            "cause": self.state.win_cause,
+            "final_round": self.state.round_number,
+            "all_roles": {p.id: p.role.value for p in self.state.players.values()},
+            "player_stats": {},
+            "game_log": self.state.game_log
+        }
