@@ -3,6 +3,8 @@ import json
 import sys
 import math
 from pathlib import Path
+import time
+
 
 # --- Configuration & Colors ---
 SCREEN_WIDTH = 1280

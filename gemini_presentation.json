@@ -1,0 +1,1868 @@
+{
+  "winner": "impostors",
+  "cause": "impostors_majority",
+  "final_round": 22,
+  "all_roles": {
+    "player_0": "impostor",
+    "player_4": "impostor",
+    "player_3": "crewmate",
+    "player_2": "crewmate",
+    "player_1": "crewmate",
+    "player_5": "crewmate",
+    "player_6": "crewmate"
+  },
+  "player_stats": {
+    "player_0": {
+      "alive": true,
+      "ejected": false,
+      "location": "Navigation",
+      "meetings_called": 0
+    },
+    "player_4": {
+      "alive": true,
+      "ejected": false,
+      "location": "Admin",
+      "meetings_called": 0
+    },
+    "player_3": {
+      "alive": false,
+      "ejected": false,
+      "location": "Electrical",
+      "meetings_called": 0
+    },
+    "player_2": {
+      "alive": false,
+      "ejected": true,
+      "location": "Admin",
+      "meetings_called": 0
+    },
+    "player_1": {
+      "alive": true,
+      "ejected": false,
+      "location": "Reactor",
+      "meetings_called": 0
+    },
+    "player_5": {
+      "alive": true,
+      "ejected": false,
+      "location": "Shields",
+      "meetings_called": 0
+    },
+    "player_6": {
+      "alive": false,
+      "ejected": false,
+      "location": "Navigation",
+      "meetings_called": 0
+    }
+  },
+  "meeting_history": [
+    {
+      "round_called": 13,
+      "called_by": "player_1",
+      "trigger": "body_report",
+      "body_found": "player_3",
+      "body_location": "Reactor",
+      "voted_out": "player_2",
+      "vote_tally": {
+        "player_2": 3,
+        "skip": 2,
+        "player_1": 1
+      },
+      "votes": {
+        "player_0": "player_2",
+        "player_4": "skip",
+        "player_2": "player_1",
+        "player_1": "player_2",
+        "player_5": "skip",
+        "player_6": "player_2"
+      },
+      "role_revealed": "crewmate",
+      "transcript": [
+        {
+          "speaker": "player_1",
+          "rotation": 1,
+          "message": "I found player_3's body in Reactor while I was heading there to finish my tasks. Did anyone see someone leaving that area?"
+        },
+        {
+          "speaker": "player_2",
+          "rotation": 1,
+          "message": "PLAYER_1, YOU FOUND IT? THAT'S SUS AS HELL! YOU WERE LITERALLY RIGHT THERE! I BET IT'S A SELF-REPORT! DON'T EVEN TRY TO BLAME ANYONE ELSE!"
+        },
+        {
+          "speaker": "player_4",
+          "rotation": 1,
+          "message": "I was heading from Electrical towards Lower Engine, so I didn't see anyone near the Reactor area. player_2, let's stay calm\u2014accusing someone immediately for reporting can be a mistake. player_1, did you pass anyone on your way in?"
+        },
+        {
+          "speaker": "player_5",
+          "rotation": 1,
+          "message": "I was over in Navigation finishing up some tasks! player_1, I trust you, thank you for reporting the body. player_2, let's try to stay calm and work together\u2014accusing each other too quickly might help the impostor. Did anyone else see anything?"
+        },
+        {
+          "speaker": "player_0",
+          "rotation": 1,
+          "message": "I was in Upper Engine finishing fuel. player_1, which direction did you enter Reactor from\u2014"
+        },
+        {
+          "speaker": "player_6",
+          "rotation": 1,
+          "message": "The reactor smells like burnt popcorn and sadness. I was busy counting the floor tiles in MedBay, there are exactly 42. player_2, your caps lock is louder than the emergency alarm, maybe chill?"
+        },
+        {
+          "speaker": "player_1",
+          "rotation": 2,
+          "message": "I entered Reactor from the Lower Engine side. I did not see anyone else in the area when I arrived."
+        },
+        {
+          "speaker": "player_2",
+          "rotation": 2,
+          "message": "LOWER ENGINE? PLAYER_4 WAS JUST THERE AND DIDN'T SEE YOU! LIAR! IT'S PLAYER_1! I'M VOTING THEM AND IF IT'S NOT THEM, VOTE ME NEXT! BUT IT IS THEM! SELF-REPORT! VOTE PLAYER_1 NOW!"
+        },
+        {
+          "speaker": "player_4",
+          "rotation": 2,
+          "message": "2\" trade. As an impostor, if I can get Player 1 (a crew"
+        },
+        {
+          "speaker": "player_5",
+          "rotation": 2,
+          "message": "player_2, let's not rush to judgment! player_4 said they"
+        },
+        {
+          "speaker": "player_0",
+          "rotation": 2,
+          "message": "player_2, you are misrepresenting player_4's statement. player_4 said they"
+        },
+        {
+          "speaker": "player_6",
+          "rotation": 2,
+          "message": "I think player_2 is actually a sentient megaphone. If we vote player_1, who will fix the popcorn smell in Reactor? I'm going to vote for the person with the most vowels in their name if we don't"
+        },
+        {
+          "speaker": "player_1",
+          "rotation": 3,
+          "message": "player_2 is misrepresenting player_4's statement. player_4 was heading toward"
+        },
+        {
+          "speaker": "player_2",
+          "rotation": 3,
+          "message": "I DON'T CARE ABOUT YOUR LITTLE LECTURES! PLAYER_1 IS THE KILLER! THEY WERE AT THE BODY! THAT'S ALL I NEED TO KNOW! VOTE PLAYER_1 NOW OR YOU'RE ALL IMPOSTORS TOO! STOP OVERTHINKING AND VOTE THE SELF-REPORTER! IT'S PLAYER_1! DO IT!"
+        },
+        {
+          "speaker": "player_4",
+          "rotation": 3,
+          "message": "player_2, you're misinterpreting my path. I was moving from Electrical"
+        },
+        {
+          "speaker": "player_5",
+          "rotation": 3,
+          "message": "player_2, please listen! player_4 said they were moving *towards* Lower Engine, not that they were already there. Let's not turn on player_1 just for reporting. We should stick together to stay safe! I really want to believe we can figure this out as a team. We shouldn't rush a vote on player_1 without more proof."
+        },
+        {
+          "speaker": "player_0",
+          "rotation": 3,
+          "message": "player_2, your aggression is clouding the facts. player_4 stated they were heading *"
+        },
+        {
+          "speaker": "player_6",
+          "rotation": 3,
+          "message": "I've decided that player_2 is actually a very loud toaster. The 42 tiles in MedBay"
+        }
+      ]
+    }
+  ],
+  "game_log": [
+    {
+      "round": 1,
+      "actions": {
+        "player_0": {
+          "action": "move",
+          "target": "Weapons"
+        },
+        "player_4": {
+          "action": "move",
+          "target": "Admin"
+        },
+        "player_3": {
+          "action": "move",
+          "target": "Medbay"
+        },
+        "player_2": {
+          "action": "move",
+          "target": "Medbay"
+        },
+        "player_1": {
+          "action": "move",
+          "target": "Admin"
+        },
+        "player_5": {
+          "action": "move",
+          "target": "Admin"
+        },
+        "player_6": {
+          "action": "move",
+          "target": "Admin"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": true,
+          "reason": null
+        },
+        "player_4": {
+          "success": true,
+          "reason": null
+        },
+        "player_3": {
+          "success": true,
+          "reason": null
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Weapons",
+          "player_4": "Admin",
+          "player_3": "Medbay",
+          "player_2": "Medbay",
+          "player_1": "Admin",
+          "player_5": "Admin",
+          "player_6": "Admin"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_3",
+          "player_2",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 2,
+      "actions": {
+        "player_0": {
+          "action": "move",
+          "target": "Navigation"
+        },
+        "player_4": {
+          "action": "do_task",
+          "target": "Swipe Card in Admin"
+        },
+        "player_3": {
+          "action": "do_task",
+          "target": "Body Scan in Medbay"
+        },
+        "player_2": {
+          "action": "do_task",
+          "target": "Body Scan in Medbay"
+        },
+        "player_1": {
+          "action": "do_task",
+          "target": "Swipe Card in Admin"
+        },
+        "player_5": {
+          "action": "do_task",
+          "target": "Upload Data in Admin"
+        },
+        "player_6": {
+          "action": "do_task",
+          "target": "Upload Data in Admin"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": true,
+          "reason": null
+        },
+        "player_4": {
+          "success": false,
+          "reason": "Only crewmates do tasks"
+        },
+        "player_3": {
+          "success": true,
+          "reason": null
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Navigation",
+          "player_4": "Admin",
+          "player_3": "Medbay",
+          "player_2": "Medbay",
+          "player_1": "Admin",
+          "player_5": "Admin",
+          "player_6": "Admin"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_3",
+          "player_2",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 3,
+      "actions": {
+        "player_0": {
+          "action": "do_task",
+          "target": "Stabilize Steering in Navigation"
+        },
+        "player_4": {
+          "action": "move",
+          "target": "Storage"
+        },
+        "player_3": {
+          "action": "do_task",
+          "target": "Body Scan in Medbay"
+        },
+        "player_2": {
+          "action": "do_task",
+          "target": "Body Scan in Medbay"
+        },
+        "player_1": {
+          "action": "do_task",
+          "target": "Swipe Card in Admin"
+        },
+        "player_5": {
+          "action": "do_task",
+          "target": "Upload Data in Admin"
+        },
+        "player_6": {
+          "action": "do_task",
+          "target": "Upload Data in Admin"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": false,
+          "reason": "Only crewmates do tasks"
+        },
+        "player_4": {
+          "success": true,
+          "reason": null
+        },
+        "player_3": {
+          "success": true,
+          "reason": null
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Navigation",
+          "player_4": "Storage",
+          "player_3": "Medbay",
+          "player_2": "Medbay",
+          "player_1": "Admin",
+          "player_5": "Admin",
+          "player_6": "Admin"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_3",
+          "player_2",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 4,
+      "actions": {
+        "player_0": {
+          "action": "move",
+          "target": "Shields"
+        },
+        "player_4": {
+          "action": "do_task",
+          "target": "Fill Canisters in Storage"
+        },
+        "player_3": {
+          "action": "do_task",
+          "target": "Body Scan in Medbay"
+        },
+        "player_2": {
+          "action": "do_task",
+          "target": "Body Scan in Medbay"
+        },
+        "player_1": {
+          "action": "do_task",
+          "target": "Upload Data in Admin"
+        },
+        "player_5": {
+          "action": "do_task",
+          "target": "Swipe Card in Admin"
+        },
+        "player_6": {
+          "action": "move",
+          "target": "Storage"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": true,
+          "reason": null
+        },
+        "player_4": {
+          "success": false,
+          "reason": "Only crewmates do tasks"
+        },
+        "player_3": {
+          "success": true,
+          "reason": null
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Shields",
+          "player_4": "Storage",
+          "player_3": "Medbay",
+          "player_2": "Medbay",
+          "player_1": "Admin",
+          "player_5": "Admin",
+          "player_6": "Storage"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_3",
+          "player_2",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 5,
+      "actions": {
+        "player_0": {
+          "action": "move",
+          "target": "Navigation"
+        },
+        "player_4": {
+          "action": "move",
+          "target": "Electrical"
+        },
+        "player_3": {
+          "action": "move",
+          "target": "Upper Engine"
+        },
+        "player_2": {
+          "action": "move",
+          "target": "Upper Engine"
+        },
+        "player_1": {
+          "action": "do_task",
+          "target": "Upload Data in Admin"
+        },
+        "player_5": {
+          "action": "do_task",
+          "target": "Swipe Card in Admin"
+        },
+        "player_6": {
+          "action": "do_task",
+          "target": "Fill Canisters in Storage"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": true,
+          "reason": null
+        },
+        "player_4": {
+          "success": true,
+          "reason": null
+        },
+        "player_3": {
+          "success": true,
+          "reason": null
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Navigation",
+          "player_4": "Electrical",
+          "player_3": "Upper Engine",
+          "player_2": "Upper Engine",
+          "player_1": "Admin",
+          "player_5": "Admin",
+          "player_6": "Storage"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_3",
+          "player_2",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 6,
+      "actions": {
+        "player_0": {
+          "action": "do_task",
+          "target": "Chart Course in Navigation"
+        },
+        "player_4": {
+          "action": "move",
+          "target": "Reactor"
+        },
+        "player_3": {
+          "action": "do_task",
+          "target": "Fuel Engines in Upper Engine"
+        },
+        "player_2": {
+          "action": "do_task",
+          "target": "Fuel Engines in Upper Engine"
+        },
+        "player_1": {
+          "action": "move",
+          "target": "Storage"
+        },
+        "player_5": {
+          "action": "move",
+          "target": "Storage"
+        },
+        "player_6": {
+          "action": "do_task",
+          "target": "Clean Filter in Storage"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": false,
+          "reason": "Only crewmates do tasks"
+        },
+        "player_4": {
+          "success": true,
+          "reason": null
+        },
+        "player_3": {
+          "success": true,
+          "reason": null
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Navigation",
+          "player_4": "Reactor",
+          "player_3": "Upper Engine",
+          "player_2": "Upper Engine",
+          "player_1": "Storage",
+          "player_5": "Storage",
+          "player_6": "Storage"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_3",
+          "player_2",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 7,
+      "actions": {
+        "player_0": {
+          "action": "move",
+          "target": "Shields"
+        },
+        "player_4": {
+          "action": "do_task",
+          "target": "Unlock Manifolds in Reactor"
+        },
+        "player_3": {
+          "action": "do_task",
+          "target": "Fuel Engines in Upper Engine"
+        },
+        "player_2": {
+          "action": "do_task",
+          "target": "Fuel Engines in Upper Engine"
+        },
+        "player_1": {
+          "action": "do_task",
+          "target": "Clean Filter in Storage"
+        },
+        "player_5": {
+          "action": "do_task",
+          "target": "Fill Canisters in Storage"
+        },
+        "player_6": {
+          "action": "do_task",
+          "target": "Fill Canisters in Storage"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": true,
+          "reason": null
+        },
+        "player_4": {
+          "success": false,
+          "reason": "Only crewmates do tasks"
+        },
+        "player_3": {
+          "success": true,
+          "reason": null
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Shields",
+          "player_4": "Reactor",
+          "player_3": "Upper Engine",
+          "player_2": "Upper Engine",
+          "player_1": "Storage",
+          "player_5": "Storage",
+          "player_6": "Storage"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_3",
+          "player_2",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 8,
+      "actions": {
+        "player_0": {
+          "action": "do_task",
+          "target": "Prime Shields in Shields"
+        },
+        "player_4": {
+          "action": "move",
+          "target": "Electrical"
+        },
+        "player_3": {
+          "action": "move",
+          "target": "Reactor"
+        },
+        "player_2": {
+          "action": "move",
+          "target": "Reactor"
+        },
+        "player_1": {
+          "action": "do_task",
+          "target": "Clean Filter in Storage"
+        },
+        "player_5": {
+          "action": "do_task",
+          "target": "Fill Canisters in Storage"
+        },
+        "player_6": {
+          "action": "do_task",
+          "target": "Clean Filter in Storage"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": false,
+          "reason": "Only crewmates do tasks"
+        },
+        "player_4": {
+          "success": true,
+          "reason": null
+        },
+        "player_3": {
+          "success": true,
+          "reason": null
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Shields",
+          "player_4": "Electrical",
+          "player_3": "Reactor",
+          "player_2": "Reactor",
+          "player_1": "Storage",
+          "player_5": "Storage",
+          "player_6": "Storage"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_3",
+          "player_2",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 9,
+      "actions": {
+        "player_0": {
+          "action": "move",
+          "target": "Navigation"
+        },
+        "player_4": {
+          "action": "move",
+          "target": "Reactor"
+        },
+        "player_3": {
+          "action": "do_task",
+          "target": "Unlock Manifolds in Reactor"
+        },
+        "player_2": {
+          "action": "do_task",
+          "target": "Unlock Manifolds in Reactor"
+        },
+        "player_1": {
+          "action": "move",
+          "target": "Electrical"
+        },
+        "player_5": {
+          "action": "move",
+          "target": "Electrical"
+        },
+        "player_6": {
+          "action": "move",
+          "target": "Electrical"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": true,
+          "reason": null
+        },
+        "player_4": {
+          "success": true,
+          "reason": null
+        },
+        "player_3": {
+          "success": true,
+          "reason": null
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Navigation",
+          "player_4": "Reactor",
+          "player_3": "Reactor",
+          "player_2": "Reactor",
+          "player_1": "Electrical",
+          "player_5": "Electrical",
+          "player_6": "Electrical"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_3",
+          "player_2",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 10,
+      "actions": {
+        "player_0": {
+          "action": "wait",
+          "target": null
+        },
+        "player_4": {
+          "action": "do_task",
+          "target": "Unlock Manifolds in Reactor"
+        },
+        "player_3": {
+          "action": "do_task",
+          "target": "Unlock Manifolds in Reactor"
+        },
+        "player_2": {
+          "action": "do_task",
+          "target": "Unlock Manifolds in Reactor"
+        },
+        "player_1": {
+          "action": "do_task",
+          "target": "Divert Power in Electrical"
+        },
+        "player_5": {
+          "action": "do_task",
+          "target": "Fix Wiring in Electrical"
+        },
+        "player_6": {
+          "action": "do_task",
+          "target": "Fix Wiring in Electrical"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": true,
+          "reason": null
+        },
+        "player_4": {
+          "success": false,
+          "reason": "Only crewmates do tasks"
+        },
+        "player_3": {
+          "success": true,
+          "reason": null
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Navigation",
+          "player_4": "Reactor",
+          "player_3": "Reactor",
+          "player_2": "Reactor",
+          "player_1": "Electrical",
+          "player_5": "Electrical",
+          "player_6": "Electrical"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_3",
+          "player_2",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 11,
+      "actions": {
+        "player_0": {
+          "action": "do_task",
+          "target": "Chart Course in Navigation"
+        },
+        "player_4": {
+          "action": "kill",
+          "target": "player_3"
+        },
+        "player_3": {
+          "action": "do_task",
+          "target": "Start Reactor in Reactor"
+        },
+        "player_2": {
+          "action": "move",
+          "target": "Electrical"
+        },
+        "player_1": {
+          "action": "do_task",
+          "target": "Divert Power in Electrical"
+        },
+        "player_5": {
+          "action": "do_task",
+          "target": "Fix Wiring in Electrical"
+        },
+        "player_6": {
+          "action": "do_task",
+          "target": "Divert Power in Electrical"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": false,
+          "reason": "Only crewmates do tasks"
+        },
+        "player_4": {
+          "success": true,
+          "reason": null
+        },
+        "player_3": {
+          "success": true,
+          "reason": null
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Navigation",
+          "player_4": "Reactor",
+          "player_3": "Reactor",
+          "player_2": "Electrical",
+          "player_1": "Electrical",
+          "player_5": "Electrical",
+          "player_6": "Electrical"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_2",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [
+          {
+            "player_id": "player_3",
+            "location": "Reactor"
+          }
+        ],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 12,
+      "actions": {
+        "player_0": {
+          "action": "move",
+          "target": "Weapons"
+        },
+        "player_4": {
+          "action": "move",
+          "target": "Upper Engine"
+        },
+        "player_3": {
+          "action": "do_task",
+          "target": "Start Reactor in Reactor"
+        },
+        "player_2": {
+          "action": "do_task",
+          "target": "Fix Wiring in Electrical"
+        },
+        "player_1": {
+          "action": "move",
+          "target": "Reactor"
+        },
+        "player_5": {
+          "action": "do_task",
+          "target": "Fix Wiring in Electrical"
+        },
+        "player_6": {
+          "action": "do_task",
+          "target": "Fix Wiring in Electrical"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": true,
+          "reason": null
+        },
+        "player_4": {
+          "success": true,
+          "reason": null
+        },
+        "player_3": {
+          "success": true,
+          "reason": null
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Weapons",
+          "player_4": "Upper Engine",
+          "player_3": "Reactor",
+          "player_2": "Electrical",
+          "player_1": "Reactor",
+          "player_5": "Electrical",
+          "player_6": "Electrical"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_2",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [
+          {
+            "player_id": "player_3",
+            "location": "Reactor"
+          }
+        ],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 14,
+      "actions": {
+        "player_0": {
+          "action": "move",
+          "target": "Weapons"
+        },
+        "player_4": {
+          "action": "move",
+          "target": "Admin"
+        },
+        "player_3": {
+          "action": "move",
+          "target": "Electrical"
+        },
+        "player_2": {
+          "action": "do_task",
+          "target": "Fix Wiring in Electrical"
+        },
+        "player_1": {
+          "action": "move",
+          "target": "Medbay"
+        },
+        "player_5": {
+          "action": "move",
+          "target": "Weapons"
+        },
+        "player_6": {
+          "action": "move",
+          "target": "Weapons"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": true,
+          "reason": null
+        },
+        "player_4": {
+          "success": true,
+          "reason": null
+        },
+        "player_3": {
+          "success": true,
+          "reason": null
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Weapons",
+          "player_4": "Admin",
+          "player_3": "Electrical",
+          "player_2": "Electrical",
+          "player_1": "Medbay",
+          "player_5": "Weapons",
+          "player_6": "Weapons"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 15,
+      "actions": {
+        "player_0": {
+          "action": "do_task",
+          "target": "Clear Asteroids in Weapons"
+        },
+        "player_4": {
+          "action": "do_task",
+          "target": "Swipe Card in Admin"
+        },
+        "player_3": {
+          "action": "do_task",
+          "target": "Divert Power in Electrical"
+        },
+        "player_2": {
+          "action": "move",
+          "target": "Storage"
+        },
+        "player_1": {
+          "action": "do_task",
+          "target": "Body Scan in Medbay"
+        },
+        "player_5": {
+          "action": "do_task",
+          "target": "Clear Asteroids in Weapons"
+        },
+        "player_6": {
+          "action": "do_task",
+          "target": "Clear Asteroids in Weapons"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": false,
+          "reason": "Only crewmates do tasks"
+        },
+        "player_4": {
+          "success": false,
+          "reason": "Only crewmates do tasks"
+        },
+        "player_3": {
+          "success": true,
+          "reason": null
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Weapons",
+          "player_4": "Admin",
+          "player_3": "Electrical",
+          "player_2": "Storage",
+          "player_1": "Medbay",
+          "player_5": "Weapons",
+          "player_6": "Weapons"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 16,
+      "actions": {
+        "player_0": {
+          "action": "move",
+          "target": "Navigation"
+        },
+        "player_4": {
+          "action": "move",
+          "target": "Storage"
+        },
+        "player_3": {
+          "action": "do_task",
+          "target": "Divert Power in Electrical"
+        },
+        "player_2": {
+          "action": "do_task",
+          "target": "Clean Filter in Storage"
+        },
+        "player_1": {
+          "action": "do_task",
+          "target": "Body Scan in Medbay"
+        },
+        "player_5": {
+          "action": "do_task",
+          "target": "Clear Asteroids in Weapons"
+        },
+        "player_6": {
+          "action": "do_task",
+          "target": "Clear Asteroids in Weapons"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": true,
+          "reason": null
+        },
+        "player_4": {
+          "success": true,
+          "reason": null
+        },
+        "player_3": {
+          "success": true,
+          "reason": null
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Navigation",
+          "player_4": "Storage",
+          "player_3": "Electrical",
+          "player_2": "Storage",
+          "player_1": "Medbay",
+          "player_5": "Weapons",
+          "player_6": "Weapons"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 17,
+      "actions": {
+        "player_0": {
+          "action": "do_task",
+          "target": "Stabilize Steering in Navigation"
+        },
+        "player_4": {
+          "action": "do_task",
+          "target": "Clean Filter in Storage"
+        },
+        "player_3": {
+          "action": "do_task",
+          "target": "Fix Wiring in Electrical"
+        },
+        "player_2": {
+          "action": "do_task",
+          "target": "Clean Filter in Storage"
+        },
+        "player_1": {
+          "action": "do_task",
+          "target": "Body Scan in Medbay"
+        },
+        "player_5": {
+          "action": "do_task",
+          "target": "Clear Asteroids in Weapons"
+        },
+        "player_6": {
+          "action": "do_task",
+          "target": "Clear Asteroids in Weapons"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": false,
+          "reason": "Only crewmates do tasks"
+        },
+        "player_4": {
+          "success": false,
+          "reason": "Only crewmates do tasks"
+        },
+        "player_3": {
+          "success": true,
+          "reason": null
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Navigation",
+          "player_4": "Storage",
+          "player_3": "Electrical",
+          "player_2": "Storage",
+          "player_1": "Medbay",
+          "player_5": "Weapons",
+          "player_6": "Weapons"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 18,
+      "actions": {
+        "player_0": {
+          "action": "move",
+          "target": "Shields"
+        },
+        "player_4": {
+          "action": "move",
+          "target": "Admin"
+        },
+        "player_3": {
+          "action": "do_task",
+          "target": "Fix Wiring in Electrical"
+        },
+        "player_2": {
+          "action": "move",
+          "target": "Admin"
+        },
+        "player_1": {
+          "action": "move",
+          "target": "Upper Engine"
+        },
+        "player_5": {
+          "action": "move",
+          "target": "Navigation"
+        },
+        "player_6": {
+          "action": "move",
+          "target": "Navigation"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": true,
+          "reason": null
+        },
+        "player_4": {
+          "success": true,
+          "reason": null
+        },
+        "player_3": {
+          "success": true,
+          "reason": null
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Shields",
+          "player_4": "Admin",
+          "player_3": "Electrical",
+          "player_2": "Admin",
+          "player_1": "Upper Engine",
+          "player_5": "Navigation",
+          "player_6": "Navigation"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 19,
+      "actions": {
+        "player_0": {
+          "action": "do_task",
+          "target": "Prime Shields in Shields"
+        },
+        "player_4": {
+          "action": "do_task",
+          "target": "Swipe Card in Admin"
+        },
+        "player_3": {
+          "action": "do_task",
+          "target": "Fix Wiring in Electrical"
+        },
+        "player_2": {
+          "action": "do_task",
+          "target": "Upload Data in Admin"
+        },
+        "player_1": {
+          "action": "do_task",
+          "target": "Fuel Engines in Upper Engine"
+        },
+        "player_5": {
+          "action": "do_task",
+          "target": "Stabilize Steering in Navigation"
+        },
+        "player_6": {
+          "action": "do_task",
+          "target": "Chart Course in Navigation"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": false,
+          "reason": "Only crewmates do tasks"
+        },
+        "player_4": {
+          "success": false,
+          "reason": "Only crewmates do tasks"
+        },
+        "player_3": {
+          "success": true,
+          "reason": null
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Shields",
+          "player_4": "Admin",
+          "player_3": "Electrical",
+          "player_2": "Admin",
+          "player_1": "Upper Engine",
+          "player_5": "Navigation",
+          "player_6": "Navigation"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 20,
+      "actions": {
+        "player_0": {
+          "action": "move",
+          "target": "Navigation"
+        },
+        "player_4": {
+          "action": "move",
+          "target": "Storage"
+        },
+        "player_3": {
+          "action": "move",
+          "target": "Admin"
+        },
+        "player_2": {
+          "action": "do_task",
+          "target": "Upload Data in Admin"
+        },
+        "player_1": {
+          "action": "do_task",
+          "target": "Fuel Engines in Upper Engine"
+        },
+        "player_5": {
+          "action": "do_task",
+          "target": "Stabilize Steering in Navigation"
+        },
+        "player_6": {
+          "action": "do_task",
+          "target": "Stabilize Steering in Navigation"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": true,
+          "reason": null
+        },
+        "player_4": {
+          "success": true,
+          "reason": null
+        },
+        "player_3": {
+          "success": false,
+          "reason": "Invalid move target"
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Navigation",
+          "player_4": "Storage",
+          "player_3": "Electrical",
+          "player_2": "Admin",
+          "player_1": "Upper Engine",
+          "player_5": "Navigation",
+          "player_6": "Navigation"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [],
+        "sabotage": null
+      }
+    },
+    {
+      "round": 21,
+      "actions": {
+        "player_0": {
+          "action": "kill",
+          "target": "player_5"
+        },
+        "player_4": {
+          "action": "move",
+          "target": "Admin"
+        },
+        "player_3": {
+          "action": "move",
+          "target": "Admin"
+        },
+        "player_2": {
+          "action": "do_task",
+          "target": "Swipe Card in Admin"
+        },
+        "player_1": {
+          "action": "move",
+          "target": "Reactor"
+        },
+        "player_5": {
+          "action": "move",
+          "target": "Shields"
+        },
+        "player_6": {
+          "action": "do_task",
+          "target": "Chart Course in Navigation"
+        }
+      },
+      "results": {
+        "player_0": {
+          "success": false,
+          "reason": "Target player_5 is not in your room after movement resolved or is dead."
+        },
+        "player_4": {
+          "success": true,
+          "reason": null
+        },
+        "player_3": {
+          "success": false,
+          "reason": "Invalid move target"
+        },
+        "player_2": {
+          "success": true,
+          "reason": null
+        },
+        "player_1": {
+          "success": true,
+          "reason": null
+        },
+        "player_5": {
+          "success": true,
+          "reason": null
+        },
+        "player_6": {
+          "success": true,
+          "reason": null
+        }
+      },
+      "state": {
+        "player_locations": {
+          "player_0": "Navigation",
+          "player_4": "Admin",
+          "player_3": "Electrical",
+          "player_2": "Admin",
+          "player_1": "Reactor",
+          "player_5": "Shields",
+          "player_6": "Navigation"
+        },
+        "alive_players": [
+          "player_0",
+          "player_4",
+          "player_1",
+          "player_5",
+          "player_6"
+        ],
+        "bodies": [],
+        "sabotage": null
+      }
+    }
+  ]
+}

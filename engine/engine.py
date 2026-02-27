@@ -891,8 +891,11 @@ class GameEngine:
             for pid in acting_players:
                 res = self.state.action_results.get(pid)
                 act = actions.get(pid, {})
-                status = "SUCCESS" if res.success else f"FAIL: {res.reason}"
-                print(f"  {pid}: {act.get('action')} {act.get('target') or ''} -> {status}")
+                if res:
+                    status = "SUCCESS" if res.success else f"FAIL: {res.reason}"
+                    print(f"  {pid}: {act.get('action')} {act.get('target') or ''} -> {status}")
+                else:
+                    print(f"  {pid}: {act.get('action')} {act.get('target') or ''} -> UNKNOWN (No Result)")
             
             if self.state.meeting_context:
                 print(f"  [!] MEETING TRIGGERED: {self.state.meeting_context['trigger']} by {self.state.meeting_context['called_by']}")
