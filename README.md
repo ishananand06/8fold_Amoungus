@@ -1,77 +1,66 @@
 # Among Us LLM Agent Simulation - Participant Kit
 
-Welcome to the Among Us LLM Agent Simulation hackathon! This repository contains a complete simulation engine for a social deduction game optimized for Large Language Models.
+This repository contains a discrete, tick-based simulation engine of "Among Us," optimized for Large Language Model (LLM) agents.
 
-## 🚀 Quick Start
+## Getting Started
 
 ### 1. Installation
 The simulation requires Python 3.9+ and has **zero** core dependencies.
-To use the high-end **Replay Theater** visualizer, you need `pygame`:
+To use the high-end **Replay Theater** visualizer, you need `pygame-ce`:
 ```bash
-pip install pygame
+pip install pygame-ce
 ```
 
 ### 2. Run a Local Game
-Test the simulation immediately with built-in rule-based and random bots. Use the `--verbose` flag to see round-by-round actions in your terminal:
+Run a simulation with built-in rule-based and random bots. Use the `--verbose` flag to see real-time actions in the terminal:
 ```bash
 python main.py play --agents random random rulebased rulebased --verbose
 ```
 
 ### 3. Visualize a Match
-After running a game, a `game_log.json` is created. View it in the high-end **Replay Theater** (requires `pygame`):
+After running a game, a `game_log.json` is created. View it in the cinematic **Replay Theater**:
 ```bash
 python main.py theater game_log.json
 ```
-*Note: You can also use `python main.py visualize game_log.json` for a basic view.*
+*Note: Use `python main.py visualize game_log.json` for a basic tkinter view.*
 
-## 🛠 Building Your Agent
+## Building Your Agent
 
-To participate, you must implement a Python class that inherits from `BaseAgent`. 
+To participate, implement a Python class that inherits from `BaseAgent`. 
 
-1.  **Copy the template**: Use `template_agent.py` as your starting point.
-2.  **Implement the 5 core methods**:
-    *   `on_game_start`: Initialize your model and strategy.
-    *   `on_task_phase`: Return a JSON action (move, do_task, kill, sabotage, etc.).
-    *   `on_discussion`: Return a natural language message for meetings.
-    *   `on_vote`: Return a player ID or "skip".
-    *   `on_game_end`: Process results for learning or logging.
+1.  **Template**: Use `template_agent.py` as your starting point.
+2.  **Core Methods**:
+    *   `on_game_start(config)`: Initialize your model and strategy.
+    *   `on_task_phase(observation)`: Return a JSON action (move, do_task, kill, sabotage, etc.).
+    *   `on_discussion(observation)`: Return a conversational message for meetings.
+    *   `on_vote(observation)`: Return a player ID or "skip".
+    *   `on_game_end(result)`: Process final match results.
 
-3.  **Test your agent**:
+3.  **Local Testing**:
     ```bash
-    python main.py play --agents path/to/your_agent.py random rulebased
+    python main.py play --agents path/to/your_agent.py random rulebased --verbose
     ```
 
-## 🎮 Game Rules & Mechanics
+## Game Mechanics
 
-*   **Map**: 10 rooms (Cafeteria, Medbay, Admin, Weapons, Upper Engine, Storage, Navigation, Reactor, Electrical, Shields).
-*   **Tick-based**: Every round, all agents submit one action simultaneously.
+*   **Map**: 10 connected rooms.
 *   **Roles**: 
-    *   **Crewmates**: Do tasks to win. 8 tasks per player.
-    *   **Impostors**: Kill crewmates to win. 6-round kill cooldown.
-*   **Sabotages**: Impostors can trigger Reactor, O2 (critical), or Lights/Comms (disruptive).
+    *   **Crewmates**: Complete 8 tasks each to win.
+    *   **Impostors**: Kill crewmates to reach majority. (6-round kill cooldown).
+*   **Sabotages**: Impostors can trigger Reactor, O2, Lights, or Comms.
 *   **Resolution Order**: 1. Cooldowns -> 2. Movement -> 3. Kills -> 4. Tasks -> 5. Reports/Meetings.
 
-## 🏆 Tournament Mode
+## Tournament Mode
 
-Run a tournament between multiple agent files in a directory:
+Run a tournament between all agent files in a directory:
 ```bash
 python main.py tournament --agents-dir ./my_agents --games 10
 ```
-This will generate an Elo-based leaderboard and save all match logs to the `match_history/` folder.
+This computes Elo-based standings and saves logs to the `match_history/` folder.
 
-## 📂 Repository Structure
+## Repository Structure
 
 - `main.py`: CLI entry point.
-- `engine/`: Core simulation logic.
-- `examples/`: Reference implementations.
-    - `gemini_personality_agent.py`: High-quality LLM agent using Vertex AI.
-    - `simple_rule_based_agent.py`: Non-LLM strategic bot using BFS pathfinding.
-- `template_agent.py`: Your starting point for development.
-
-## 💡 Reference Examples
-
-Check the `examples/` directory for inspiration:
-*   **Gemini Personality Agent**: Shows how to wrap a Vertex AI LLM, track tokens, and use "Personality" prompts to drive unique behavior.
-*   **Simple Rule-Based Agent**: Demonstrates basic game logic (pathfinding, task prioritization) without an LLM.
-
-Good luck, and may the best model win!
+- `engine/`: Core simulation logic and visualizers.
+- `examples/`: Reference implementations (LLM and Rule-based).
+- `template_agent.py`: Starter template for development.
