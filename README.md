@@ -55,14 +55,19 @@ python main.py tournament --agents-dir ./my_agents --games 10
 ```
 This will generate an Elo-based leaderboard and save all match logs to the `match_history/` folder.
 
-## 📁 Repository Structure
+## 📂 Repository Structure
 
 - `main.py`: CLI entry point.
 - `engine/`: Core simulation logic.
-    - `config.py`: Game constants and map data.
-    - `engine.py`: The state machine and observation generator.
-    - `agents.py`: Base classes and utility functions.
-    - `visualizer.py`: Replay UI.
+- `examples/`: Reference implementations.
+    - `gemini_personality_agent.py`: High-quality LLM agent using Vertex AI.
+    - `simple_rule_based_agent.py`: Non-LLM strategic bot using BFS pathfinding.
 - `template_agent.py`: Your starting point for development.
+
+## 💡 Reference Examples
+
+Check the `examples/` directory for inspiration:
+*   **Gemini Personality Agent**: Shows how to wrap a Vertex AI LLM, track tokens, and use "Personality" prompts to drive unique behavior.
+*   **Simple Rule-Based Agent**: Demonstrates basic game logic (pathfinding, task prioritization) without an LLM.
 
 Good luck, and may the best model win!
