@@ -827,9 +827,15 @@ class GameEngine:
         for pid, agent in self.agents.items():
             self._call_agent(pid, "on_game_start", self.obs.generate_game_start_info(pid))
 
-    def run(self, forced_roles: dict[str, Role] | None = None) -> dict:
+    def run(self, forced_roles: dict[str, Role] | None = None, verbose: bool = False) -> dict:
         self.setup_game(forced_roles)
+        self.verbose = verbose
         
+        if self.verbose:
+            print(f"\n[GAME START] ID: {self.state.config.num_players} players, {self.state.config.num_impostors} impostors")
+            for pid, p in self.state.players.items():
+                print(f"  - {pid}: {p.role.value}")
+
         while self.state.phase != Phase.GAME_OVER:
             if self.state.phase == Phase.TASK:
                 self._run_task_round()
@@ -839,6 +845,9 @@ class GameEngine:
                 self._run_voting_phase()
                 
         result = self._build_game_result()
+        if self.verbose:
+            print(f"\n[GAME OVER] Winner: {result['winner']} | Cause: {result['cause']}")
+            
         for pid, agent in self.agents.items():
             self._call_agent(pid, "on_game_end", self.obs.generate_game_end_info(pid))
         return result
@@ -872,14 +881,30 @@ class GameEngine:
                 raw = f.result()
                 actions[pid] = self._sanitize_action(raw)
 
-        print(f"  Round {self.state.round_number}: resolving actions...", end="\r")
+        if self.verbose:
+            print(f"\n--- Round {self.state.round_number + 1} ---")
+            
         self.resolver.resolve_round(actions)
+        
+        if self.verbose:
+            # Print resolution summary
+            for pid in acting_players:
+                res = self.state.action_results.get(pid)
+                act = actions.get(pid, {})
+                status = "SUCCESS" if res.success else f"FAIL: {res.reason}"
+                print(f"  {pid}: {act.get('action')} {act.get('target') or ''} -> {status}")
+            
+            if self.state.meeting_context:
+                print(f"  [!] MEETING TRIGGERED: {self.state.meeting_context['trigger']} by {self.state.meeting_context['called_by']}")
 
     def _run_discussion_phase(self) -> None:
         living_ids = [p.id for p in self.state.players.values() if p.alive]
         random.shuffle(living_ids)
         self.state.discussion_speaker_order = living_ids
         self.state.chat_history = []
+
+        if self.verbose:
+            print(f"\n[DISCUSSION PHASE] Order: {' -> '.join(living_ids)}")
 
         for rotation in range(self.config.discussion_rotations):
             for speaker_id in self.state.discussion_speaker_order:
@@ -892,6 +917,8 @@ class GameEngine:
                     "rotation": rotation + 1,
                     "message": message
                 })
+                if self.verbose:
+                    print(f"  {speaker_id}: \"{message}\"")
                 
         self.state.phase = Phase.VOTING
 
@@ -925,6 +952,13 @@ class GameEngine:
             p.ejected = True
             if self.config.confirm_ejects:
                 role_revealed = p.role.value
+        
+        if self.verbose:
+            print(f"\n[VOTING RESULTS] Tally: {dict(tally)}")
+            if elected:
+                print(f"  >> {elected} was ejected! (Role: {role_revealed})")
+            else:
+                print("  >> No one was ejected.")
                 
         self.state.meeting_history.append({
             "round_called": self.state.round_number,

@@ -39,6 +39,7 @@ def main():
     play_parser.add_argument("--agents", nargs="+", default=["random", "random", "rulebased", "rulebased", "rulebased", "rulebased", "rulebased"], help="List of agent paths or names ('random', 'rulebased')")
     play_parser.add_argument("--config", type=str, help="Path to JSON config override")
     play_parser.add_argument("--output", type=str, default="game_log.json", help="Output file for game log")
+    play_parser.add_argument("--verbose", action="store_true", help="Print round details to console")
 
     # Tournament command
     tourney_parser = subparsers.add_parser("tournament", help="Run a multi-game tournament")
@@ -82,7 +83,7 @@ def main():
             config.num_impostors = max(1, int((config.num_players - 1) // 2))
             
         engine = GameEngine(config, agent_instances)
-        result = engine.run()
+        result = engine.run(verbose=args.verbose)
         print(f"Game Over! Winner: {result['winner']} (Cause: {result['cause']})")
         
         with open(args.output, "w") as f:

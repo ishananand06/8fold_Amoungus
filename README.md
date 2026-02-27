@@ -9,9 +9,9 @@ The simulation requires Python 3.9+ and has **zero** core dependencies (only sta
 *Note: Your agents may require specific LLM SDKs like `google-cloud-aiplatform` or `openai`.*
 
 ### 2. Run a Local Game
-Test the simulation immediately with built-in rule-based and random bots:
+Test the simulation immediately with built-in rule-based and random bots. Use the `--verbose` flag to see round-by-round actions in your terminal:
 ```bash
-python main.py play --agents random random rulebased rulebased
+python main.py play --agents random random rulebased rulebased --verbose
 ```
 
 ### 3. Visualize a Match
