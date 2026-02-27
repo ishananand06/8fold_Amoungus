@@ -78,7 +78,13 @@ class GeminiPersonalityAgent(BaseAgent):
     Includes a specific personality and strategic instructions.
     """
     def __init__(self, personality="The Analytical Detective: Logical, tracks movements, suspicious of alibis."):
-        self.llm = VertexAIWrapper()
+        try:
+            self.llm = VertexAIWrapper()
+            self.llm_available = True
+        except Exception as e:
+            print(f"Warning: Gemini Agent could not initialize LLM ({e}). Falling back to dummy responses.")
+            self.llm_available = False
+            
         self.personality = personality
         self.id = ""
         self.role = ""
@@ -88,60 +94,43 @@ class GeminiPersonalityAgent(BaseAgent):
         self.role = config["your_role"]
 
     def _get_system_prompt(self):
-        return f"""You are playing 'Among Us' as {self.id}, a {self.role}.
-PERSONALITY: {self.personality}
-
-STRATEGY:
-- Crewmate: Prioritize tasks. If you see a body, report it.
-- Impostor: You must be in the SAME room as someone to kill them. Predict movement.
-- DISCUSSION: Be logical. If there are 4-5 players left, SKIPPING is dangerous. Vote for the most suspicious person.
-- GHOSTS: If dead, your ONLY goal is to move to your task locations and finish them.
-
-RESPONSE FORMAT:
-- During TASK phase: Respond with a JSON object like {{"action": "move", "target": "Admin"}} or {{"action": "do_task", "target": "task_id"}}.
-- During DISCUSSION: Respond with plain text conversational message.
-- During VOTING: Respond with player ID or "skip".
-"""
+        return f"You are playing 'Among Us' as {self.id}, a {self.role}.\nPERSONALITY: {self.personality}\n\nSTRATEGY:\n- Crewmate: Prioritize tasks. If you see a body, report it.\n- Impostor: You must be in the SAME room as someone to kill them. Predict movement.\n- DISCUSSION: Be logical. If there are 4-5 players left, SKIPPING is dangerous. Vote for the most suspicious person.\n- GHOSTS: If dead, your ONLY goal is to move to your task locations and finish them.\n\nRESPONSE FORMAT:\n- During TASK phase: Respond with a JSON object like {{\"action\": \"move\", \"target\": \"Admin\"}} or {{\"action\": \"do_task\", \"target\": \"task_id\"}}.\n- During DISCUSSION: Respond with plain text conversational message.\n- During VOTING: Respond with player ID or \"skip\"."
 
     def on_task_phase(self, obs):
+        if not self.llm_available:
+            return {"action": "wait"}
+            
         prompt = self._get_system_prompt()
         obs_text = format_observation_as_text(obs)
         
         state_note = ""
         if "available_actions" not in obs:
-            state_note = "
-NOTE: You are a GHOST (dead). Focus on tasks."
+            state_note = "\nNOTE: You are a GHOST (dead). Focus on tasks."
         
-        user_msg = f"CURRENT OBSERVATION:
-{obs_text}{state_note}
-
-What is your next action? Respond ONLY with JSON. If doing a task, use the EXACT ID provided."
+        user_msg = f"CURRENT OBSERVATION:\n{obs_text}{state_note}\n\nWhat is your next action? Respond ONLY with JSON. If doing a task, use the EXACT ID provided."
         resp = self.llm.call(prompt, user_msg)
         return parse_llm_json(resp, {"action": "wait"})
 
     def on_discussion(self, obs):
+        if not self.llm_available:
+            return "I am a robot and my LLM is offline."
+            
         prompt = self._get_system_prompt()
         obs_text = format_observation_as_text(obs)
-        chat_hist = "
-".join([f"{m['speaker']}: {m['message']}" for m in obs.get("chat_history", [])])
-        user_msg = f"MEETING CONTEXT: {obs.get('meeting_context')}
-
-CHAT HISTORY:
-{chat_hist}
-
-It is your turn. Be concise."
+        chat_hist = "\n".join([f"{m['speaker']}: {m['message']}" for m in obs.get("chat_history", [])])
+        user_msg = f"MEETING CONTEXT: {obs.get('meeting_context')}\n\nCHAT HISTORY:\n{chat_hist}\n\nIt is your turn. Be concise."
         return self.llm.call(prompt, user_msg)
 
     def on_vote(self, obs):
+        if not self.llm_available:
+            return "skip"
+            
         prompt = self._get_system_prompt()
-        chat_hist = "
-".join([f"{m['speaker']}: {m['message']}" for m in obs.get("chat_history", [])])
-        user_msg = f"CHAT HISTORY:
-{chat_hist}
-
-Who do you vote for? Respond with Player ID or 'skip'."
+        chat_hist = "\n".join([f"{m['speaker']}: {m['message']}" for m in obs.get("chat_history", [])])
+        user_msg = f"CHAT HISTORY:\n{chat_hist}\n\nWho do you vote for? Respond with Player ID or 'skip'."
         resp = self.llm.call(prompt, user_msg)
         # Simple extraction of the ID from the response
+        if not resp: return "skip"
         return resp.strip().split()[-1].replace('"', '').replace("'", "")
 
     def on_game_end(self, result):
