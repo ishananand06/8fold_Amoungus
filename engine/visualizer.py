@@ -6,30 +6,38 @@ from pathlib import Path
 
 # Map Layout Constants (X, Y coordinates for rooms)
 ROOM_COORDS = {
-    "Cafeteria": (400, 100),
-    "Medbay": (200, 200),
-    "Admin": (400, 200),
-    "Weapons": (600, 200),
-    "Upper Engine": (200, 350),
-    "Storage": (400, 350),
-    "Navigation": (600, 350),
-    "Reactor": (200, 500),
-    "Electrical": (400, 500),
-    "Shields": (600, 500)
+    "Cafeteria":      (400, 60),
+    "Weapons":        (650, 100),
+    "O2":             (580, 200),
+    "Navigation":     (720, 280),
+    "Shields":        (650, 420),
+    "Communications": (530, 480),
+    "Storage":        (400, 380),
+    "Admin":          (510, 280),
+    "Electrical":     (260, 330),
+    "Lower Engine":   (130, 400),
+    "Security":       (190, 240),
+    "Reactor":        (70,  270),
+    "Upper Engine":   (130, 120),
+    "MedBay":         (270, 140),
 }
 
 # Room Adjacency for drawing connections
 ADJACENCY = {
-    "Cafeteria": ["Medbay", "Admin", "Weapons"],
-    "Medbay": ["Cafeteria", "Upper Engine"],
-    "Admin": ["Cafeteria", "Storage"],
-    "Weapons": ["Cafeteria", "Navigation"],
-    "Upper Engine": ["Medbay", "Reactor"],
-    "Storage": ["Admin", "Electrical"],
-    "Navigation": ["Weapons", "Shields"],
-    "Reactor": ["Upper Engine", "Electrical"],
-    "Electrical": ["Storage", "Reactor"],
-    "Shields": ["Navigation"]
+    "Cafeteria":      ["Weapons", "MedBay", "Upper Engine", "Admin", "Storage"],
+    "Weapons":        ["Cafeteria", "O2", "Navigation"],
+    "O2":             ["Weapons", "Navigation", "Shields", "Admin"],
+    "Navigation":     ["Weapons", "O2", "Shields"],
+    "Shields":        ["Navigation", "O2", "Communications", "Storage"],
+    "Communications": ["Shields", "Storage"],
+    "Storage":        ["Cafeteria", "Admin", "Communications", "Shields", "Electrical"],
+    "Admin":          ["Cafeteria", "Storage", "O2"],
+    "Electrical":     ["Storage", "Lower Engine", "Security"],
+    "Lower Engine":   ["Electrical", "Security", "Reactor"],
+    "Security":       ["Upper Engine", "Lower Engine", "Reactor", "Electrical"],
+    "Reactor":        ["Upper Engine", "Lower Engine", "Security"],
+    "Upper Engine":   ["Cafeteria", "MedBay", "Security", "Reactor"],
+    "MedBay":         ["Upper Engine", "Cafeteria"],
 }
 
 class AmongUsVisualizer:

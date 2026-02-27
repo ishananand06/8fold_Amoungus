@@ -29,44 +29,53 @@ class GameConfig:
         assert self.max_total_rounds >= 10, "Game must have at least 10 rounds"
 
 MAP_ADJACENCY: dict[str, list[str]] = {
-    "Cafeteria":    ["Medbay", "Admin", "Weapons"],
-    "Medbay":       ["Cafeteria", "Upper Engine"],
-    "Admin":        ["Cafeteria", "Storage"],
-    "Weapons":      ["Cafeteria", "Navigation"],
-    "Upper Engine": ["Medbay", "Reactor"],
-    "Storage":      ["Admin", "Electrical"],
-    "Navigation":   ["Weapons", "Shields"],
-    "Reactor":      ["Upper Engine", "Electrical"],
-    "Electrical":   ["Storage", "Reactor"],
-    "Shields":      ["Navigation"]
+    "Cafeteria":      ["Weapons", "MedBay", "Upper Engine", "Admin", "Storage"],
+    "Weapons":        ["Cafeteria", "O2", "Navigation"],
+    "O2":             ["Weapons", "Navigation", "Shields", "Admin"],
+    "Navigation":     ["Weapons", "O2", "Shields"],
+    "Shields":        ["Navigation", "O2", "Communications", "Storage"],
+    "Communications": ["Shields", "Storage"],
+    "Storage":        ["Cafeteria", "Admin", "Communications", "Shields", "Electrical"],
+    "Admin":          ["Cafeteria", "Storage", "O2"],
+    "Electrical":     ["Storage", "Lower Engine", "Security"],
+    "Lower Engine":   ["Electrical", "Security", "Reactor"],
+    "Security":       ["Upper Engine", "Lower Engine", "Reactor", "Electrical"],
+    "Reactor":        ["Upper Engine", "Lower Engine", "Security"],
+    "Upper Engine":   ["Cafeteria", "MedBay", "Security", "Reactor"],
+    "MedBay":         ["Upper Engine", "Cafeteria"],
 }
 
 ALL_ROOMS: list[str] = list(MAP_ADJACENCY.keys())
 
 TASK_POOL: list[dict] = [
-    {"name": "Fix Wiring",        "location": "Electrical",   "required": 3, "visual": False},
-    {"name": "Divert Power",      "location": "Electrical",   "required": 2, "visual": False},
-    {"name": "Upload Data",       "location": "Admin",        "required": 2, "visual": False},
-    {"name": "Swipe Card",        "location": "Admin",        "required": 2, "visual": False},
-    {"name": "Body Scan",         "location": "Medbay",       "required": 3, "visual": True},
-    {"name": "Calibrate Engines", "location": "Upper Engine", "required": 2, "visual": False},
-    {"name": "Fuel Engines",      "location": "Upper Engine", "required": 2, "visual": False},
-    {"name": "Clear Asteroids",   "location": "Weapons",      "required": 3, "visual": True},
-    {"name": "Chart Course",      "location": "Navigation",   "required": 2, "visual": False},
-    {"name": "Stabilize Steering","location": "Navigation",   "required": 2, "visual": False},
-    {"name": "Prime Shields",     "location": "Shields",      "required": 2, "visual": False},
-    {"name": "Align Telescope",   "location": "Shields",      "required": 2, "visual": False},
-    {"name": "Clean Filter",      "location": "Storage",      "required": 2, "visual": False},
-    {"name": "Fill Canisters",    "location": "Storage",      "required": 2, "visual": False},
-    {"name": "Start Reactor",     "location": "Reactor",      "required": 3, "visual": False},
-    {"name": "Unlock Manifolds",  "location": "Reactor",      "required": 2, "visual": False}
+    {"name": "Fix Wiring",         "location": "Electrical",     "required": 3, "visual": False},
+    {"name": "Divert Power",       "location": "Electrical",     "required": 2, "visual": False},
+    {"name": "Upload Data",        "location": "Admin",          "required": 2, "visual": False},
+    {"name": "Swipe Card",         "location": "Admin",          "required": 2, "visual": False},
+    {"name": "Body Scan",          "location": "MedBay",         "required": 3, "visual": True},
+    {"name": "Calibrate Engines",  "location": "Upper Engine",   "required": 2, "visual": False},
+    {"name": "Fuel Engines",       "location": "Upper Engine",   "required": 2, "visual": False},
+    {"name": "Fuel Engines",       "location": "Lower Engine",   "required": 2, "visual": False},
+    {"name": "Clear Asteroids",    "location": "Weapons",        "required": 3, "visual": True},
+    {"name": "Chart Course",       "location": "Navigation",     "required": 2, "visual": False},
+    {"name": "Stabilize Steering", "location": "Navigation",     "required": 2, "visual": False},
+    {"name": "Prime Shields",      "location": "Shields",        "required": 2, "visual": False},
+    {"name": "Align Telescope",    "location": "Shields",        "required": 2, "visual": False},
+    {"name": "Clean Filter",       "location": "Storage",        "required": 2, "visual": False},
+    {"name": "Fill Canisters",     "location": "Storage",        "required": 2, "visual": False},
+    {"name": "Start Reactor",      "location": "Reactor",        "required": 3, "visual": False},
+    {"name": "Unlock Manifolds",   "location": "Reactor",        "required": 2, "visual": False},
+    {"name": "Clean O2 Filter",    "location": "O2",             "required": 2, "visual": False},
+    {"name": "Empty Garbage",      "location": "O2",             "required": 2, "visual": False},
+    {"name": "Fix Comms",          "location": "Communications", "required": 2, "visual": False},
+    {"name": "Check Security",     "location": "Security",       "required": 2, "visual": False},
 ]
 
 SABOTAGE_DEFINITIONS: dict[str, dict] = {
-    "reactor": {"fix_locations": {"Reactor": 4},       "critical": True},
-    "o2":      {"fix_locations": {"Admin": 2, "Shields": 2}, "critical": True},
-    "lights":  {"fix_locations": {"Electrical": 3},     "critical": False},
-    "comms":   {"fix_locations": {"Admin": 3},          "critical": False}
+    "reactor": {"fix_locations": {"Reactor": 4},        "critical": True},
+    "o2":      {"fix_locations": {"O2": 2, "Admin": 2}, "critical": True},
+    "lights":  {"fix_locations": {"Electrical": 3},      "critical": False},
+    "comms":   {"fix_locations": {"Communications": 3},  "critical": False},
 }
 
 VALID_ACTIONS: list[str] = [

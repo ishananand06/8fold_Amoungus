@@ -25,29 +25,37 @@ COLORS = {
 }
 
 ROOM_POSITIONS = {
-    "Cafeteria": (640, 100),
-    "Medbay": (340, 200),
-    "Admin": (640, 200),
-    "Weapons": (940, 200),
-    "Upper Engine": (340, 380),
-    "Storage": (640, 380),
-    "Navigation": (940, 380),
-    "Reactor": (340, 560),
-    "Electrical": (640, 560),
-    "Shields": (940, 560)
+    "Cafeteria":      (540, 80),
+    "Weapons":        (850, 120),
+    "O2":             (770, 250),
+    "Navigation":     (950, 340),
+    "Shields":        (850, 500),
+    "Communications": (720, 580),
+    "Storage":        (540, 460),
+    "Admin":          (680, 340),
+    "Electrical":     (350, 400),
+    "Lower Engine":   (180, 470),
+    "Security":       (260, 290),
+    "Reactor":        (100, 320),
+    "Upper Engine":   (180, 140),
+    "MedBay":         (360, 180),
 }
 
 ADJACENCY = {
-    "Cafeteria": ["Medbay", "Admin", "Weapons"],
-    "Medbay": ["Cafeteria", "Upper Engine"],
-    "Admin": ["Cafeteria", "Storage"],
-    "Weapons": ["Cafeteria", "Navigation"],
-    "Upper Engine": ["Medbay", "Reactor"],
-    "Storage": ["Admin", "Electrical"],
-    "Navigation": ["Weapons", "Shields"],
-    "Reactor": ["Upper Engine", "Electrical"],
-    "Electrical": ["Storage", "Reactor"],
-    "Shields": ["Navigation"]
+    "Cafeteria":      ["Weapons", "MedBay", "Upper Engine", "Admin", "Storage"],
+    "Weapons":        ["Cafeteria", "O2", "Navigation"],
+    "O2":             ["Weapons", "Navigation", "Shields", "Admin"],
+    "Navigation":     ["Weapons", "O2", "Shields"],
+    "Shields":        ["Navigation", "O2", "Communications", "Storage"],
+    "Communications": ["Shields", "Storage"],
+    "Storage":        ["Cafeteria", "Admin", "Communications", "Shields", "Electrical"],
+    "Admin":          ["Cafeteria", "Storage", "O2"],
+    "Electrical":     ["Storage", "Lower Engine", "Security"],
+    "Lower Engine":   ["Electrical", "Security", "Reactor"],
+    "Security":       ["Upper Engine", "Lower Engine", "Reactor", "Electrical"],
+    "Reactor":        ["Upper Engine", "Lower Engine", "Security"],
+    "Upper Engine":   ["Cafeteria", "MedBay", "Security", "Reactor"],
+    "MedBay":         ["Upper Engine", "Cafeteria"],
 }
 
 class ReplayTheater:
