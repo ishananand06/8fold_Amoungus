@@ -176,5 +176,22 @@ class TestAgents(unittest.TestCase):
         result = engine.run()
         self.assertIn(result["winner"], ["crewmates", "impostors"])
 
+
+class TestTournament(unittest.TestCase):
+    def test_tournament_runner(self):
+        from tournament import TournamentRunner
+        from agents import RandomBot, RuleBasedBot
+        
+        agent_classes = {
+            "Team 1": RandomBot,
+            "Team 2": RuleBasedBot
+        }
+        
+        runner = TournamentRunner(agent_classes, GameConfig(max_total_rounds=10), games_per_team=1, log_dir="test_logs")
+        standings = runner.run_tournament()
+        
+        self.assertEqual(len(standings), 2)
+        self.assertIn("Team 1", [s["team"] for s in standings])
+
 if __name__ == '__main__':
     unittest.main()
