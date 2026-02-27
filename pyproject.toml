@@ -1,11 +1,12 @@
 [project]
 name = "eightfold-amongus"
 version = "0.1.0"
-description = "A tick-based Among Us simulation for LLM agents"
+description = "Among Us LLM Agent Simulation for ARIES"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "pygame-ce>=2.5.0",
+    "python-dotenv>=1.2.1",
     "requests>=2.31.0",
 ]
 
@@ -15,3 +16,4 @@ build-backend = "hatchling.build"
 
 [tool.uv]
 managed = true
+package = false 

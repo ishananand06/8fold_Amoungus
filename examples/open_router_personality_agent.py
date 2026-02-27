@@ -4,6 +4,8 @@ import requests
 import logging
 from engine.engine import BaseAgent, Role
 from engine.agents import parse_llm_json, format_observation_as_text
+from dotenv import load_dotenv
+load_dotenv()  
 
 # --- OpenRouter Utilities ---
 
@@ -12,7 +14,7 @@ class OpenRouterWrapper:
     A reusable wrapper for calling models via OpenRouter.
     Uses the standard OpenAI Chat Completions API format.
     """
-    def __init__(self, model_name="meta-llama/llama-3-8b-instruct:free"):
+    def __init__(self, model_name="upstage/solar-pro-3:free"):
         self.api_key = os.environ.get("OPENROUTER_API_KEY")
         self.model_name = model_name
         
@@ -62,7 +64,7 @@ class OpenRouterPersonalityAgent(BaseAgent):
     An optimized agent that uses OpenRouter.
     Includes a specific personality and strategic instructions.
     """
-    def __init__(self, personality="The Analytical Detective: Logical, tracks movements, suspicious of alibis.", model_name="meta-llama/llama-3-8b-instruct:free"):
+    def __init__(self, personality="The Analytical Detective: Logical, tracks movements, suspicious of alibis.", model_name="upstage/solar-pro-3:free"):
         try:
             self.llm = OpenRouterWrapper(model_name=model_name)
             self.llm_available = True
