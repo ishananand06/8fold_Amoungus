@@ -132,8 +132,9 @@ class AmongUsVisualizer:
             
         log = self.game_data["game_log"][self.current_round]
         state = log.get("state", {})
+        r_num = log.get("round", self.current_round + 1)
         
-        self.round_lbl.config(text=f"Round: {self.current_round} / {self.max_rounds}")
+        self.round_lbl.config(text=f"Round: {r_num} / {self.game_data['game_log'][-1].get('round')}")
         
         # Draw Map
         self.canvas.delete("all")
@@ -147,15 +148,14 @@ class AmongUsVisualizer:
                 
         # Draw rooms
         for room, (x, y) in ROOM_COORDS.items():
-            # Check for bodies or sabotage
             bg_color = "white"
             bodies = [b for b in state.get("bodies", []) if b["location"] == room]
             if bodies:
-                bg_color = "#FFE4E1"  # Light pink for body
+                bg_color = "#FFE4E1"
             
             sab = state.get("sabotage")
             if sab and sab.get("type") in ("reactor", "o2") and room in sab.get("fix_progress", {}):
-                bg_color = "#FFD700"  # Gold for critical sabotage fix location
+                bg_color = "#FFD700"
 
             self.canvas.create_rectangle(x-50, y-30, x+50, y+30, fill=bg_color, outline="black", width=2)
             self.canvas.create_text(x, y, text=room, font=("Arial", 10, "bold"))
@@ -168,7 +168,6 @@ class AmongUsVisualizer:
         alive_players = state.get("alive_players", [])
         all_roles = self.game_data.get("all_roles", {})
         
-        # Group players by room to stack them
         room_stacks = {}
         for pid, loc in player_locs.items():
             room_stacks.setdefault(loc, []).append(pid)
@@ -176,7 +175,7 @@ class AmongUsVisualizer:
         for loc, pids in room_stacks.items():
             if loc not in ROOM_COORDS: continue
             rx, ry = ROOM_COORDS[loc]
-            for i, pid in enumerate(pids):
+            for i, pid in enumerate(sorted(pids)):
                 offset_x = (i % 3 - 1) * 20
                 offset_y = (i // 3 + 1) * 20
                 
@@ -188,7 +187,7 @@ class AmongUsVisualizer:
 
         # Update Info Text
         self.round_info_txt.delete(1.0, tk.END)
-        self.round_info_txt.insert(tk.END, f"--- Round {self.current_round} Actions ---\n\n")
+        self.round_info_txt.insert(tk.END, f"--- Round {r_num} Actions ---\n\n")
         
         results = log.get("results", {})
         actions = log.get("actions", {})
@@ -202,12 +201,13 @@ class AmongUsVisualizer:
         # Update Chat Transcript
         self.chat_txt.delete(1.0, tk.END)
         meetings = self.game_data.get("meeting_history", [])
-        current_meetings = [m for m in meetings if m["round_called"] == self.current_round + 1] # meetings happen after resolution
+        # Look for meeting matching this exact round number
+        current_meetings = [m for m in meetings if m["round_called"] == r_num]
         
         if current_meetings:
             for m in current_meetings:
-                self.chat_txt.insert(tk.END, f"--- MEETING CALLED BY {m['called_by']} ---\n")
-                self.chat_txt.insert(tk.END, f"Trigger: {m['trigger']}\n")
+                self.chat_txt.insert(tk.END, f"--- EMERGENCY MEETING: ROUND {r_num} ---\n")
+                self.chat_txt.insert(tk.END, f"Trigger: {m['trigger']} | Caller: {m['called_by']}\n")
                 if m['voted_out']:
                     self.chat_txt.insert(tk.END, f"Result: {m['voted_out']} EJECTED ({m['role_revealed']})\n")
                 else:
@@ -215,8 +215,7 @@ class AmongUsVisualizer:
                 self.chat_txt.insert(tk.END, "\nTranscript:\n")
                 
                 for msg in m.get("transcript", []):
-                    self.chat_txt.insert(tk.END, f"[{msg['rotation']}] {msg['speaker']}: {msg['message']}\n")
-                self.chat_txt.insert(tk.END, "\n")
+                    self.chat_txt.insert(tk.END, f"[{msg['rotation']}] {msg['speaker']}: {msg['message']}\n\n")
         else:
             self.chat_txt.insert(tk.END, "No meeting this round.")
 

@@ -416,19 +416,22 @@ class ActionResolver:
                 self.state.players[pid].last_action = "moving"
         
         for pid, origin, target in moves:
+            mover = self.state.players[pid]
             self.state.players[pid].location = target
             for other_p in self.state.players.values():
                 if other_p.id != pid and other_p.alive:
-                    if other_p.location == origin and other_p.id not in [m[0] for m in moves]:
-                        self.state.events[other_p.id].append(f"{pid} left toward {target}")
-                    elif other_p.location == target and other_p.id not in [m[0] for m in moves]:
-                        self.state.events[other_p.id].append(f"{pid} arrived from {origin}")
+                    if mover.alive: # Ghosts are invisible
+                        if other_p.location == origin and other_p.id not in [m[0] for m in moves]:
+                            self.state.events[other_p.id].append(f"{pid} left toward {target}")
+                        elif other_p.location == target and other_p.id not in [m[0] for m in moves]:
+                            self.state.events[other_p.id].append(f"{pid} arrived from {origin}")
 
         for i, (pid1, orig1, tgt1) in enumerate(moves):
             for pid2, orig2, tgt2 in moves[i+1:]:
                 if orig1 == tgt2 and tgt1 == orig2:
-                    self.state.events[pid1].append(f"You passed {pid2} between {orig1} and {tgt1}")
-                    self.state.events[pid2].append(f"You passed {pid1} between {orig2} and {tgt2}")
+                    if self.state.players[pid1].alive and self.state.players[pid2].alive: # Both must be alive to see each other
+                        self.state.events[pid1].append(f"You passed {pid2} between {orig1} and {tgt1}")
+                        self.state.events[pid2].append(f"You passed {pid1} between {orig2} and {tgt2}")
             
             hist = self.state.movement_history.setdefault(pid1, [])
             hist.append({"round": self.state.round_number, "location": tgt1})
@@ -467,7 +470,7 @@ class ActionResolver:
                 if task:
                     task.progress += 1
                     p.last_action = "doing_task"
-                    if task.completed and task.visual:
+                    if task.completed and task.visual and p.alive: # Ghosts don't trigger visual events
                         for w in self.state.players.values():
                             blinded = self.state.sabotage and self.state.sabotage.type == SabotageType.LIGHTS and w.role == Role.CREWMATE
                             if w.alive and w.location == p.location and not blinded and w.id != p.id:
